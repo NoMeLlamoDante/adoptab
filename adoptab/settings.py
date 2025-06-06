@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qc0h-u@7lb_$2*+-_%c-_)_qy&i=s^8z46kjv)p%y(q7wb4)i('
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # apps
+    'pictures',
+    # tools
+
 ]
 
 MIDDLEWARE = [
@@ -49,12 +55,38 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "bucket_name": os.getenv('DO_SPACES_SPACE_NAME'),
+            "access_key": os.getenv('DO_ACCESS_KEY'),
+            "secret_key": os.getenv('DO_SECRET_KEY'),
+            "region_name": os.getenv('DO_REGION'),
+            "endpoint_url": os.getenv('DO_SPACES_ENDPOINT_URL'),
+            "default_acl": "public-read",
+            "location": "media",
+            # required for the correct storage.exists() functioning
+            "file_overwrite": False,
+            # don't append any authentication parameters to the files.
+            "querystring_auth": False,
+        },
+    },
+    "staticfiles": {
+        # For static files, use file-system storage
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        # Or Whitenoise storage
+        # "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
+MEDIA_URL = "https://imagespets.nyc3.digitaloceanspaces.com/imagespets/media/"
+
 ROOT_URLCONF = 'adoptab.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,16 +117,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.\
+            auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.\
+            auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.\
+            auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.\
+            auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -110,22 +146,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+USE_SPACES = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = "static/"
-
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 STATICFILES_DIRS = [
-    BASE_DIR / "media",
     BASE_DIR / "static",
-    "/var/www/static/",
 ]
-
-STATIC_ROOT = "/var/www/adoptab.com/static/"  # Para producción
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
