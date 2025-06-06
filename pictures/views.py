@@ -6,7 +6,6 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from .models import Picture
-from .utils import generate_custom_presigned_url
 
 # Create your views here.
 
@@ -28,7 +27,6 @@ class UploadPictureView(View):
                 "id": picture.id,
                 "title": picture.title,
                 "url": picture.file.url,
-                "file_url": generate_custom_presigned_url(picture.file.name),
                 "uploaded_at": picture.uploaded_at,
             },
             status=201,
@@ -45,7 +43,6 @@ class ListPicturesView(View):
                     "id": picture.id,
                     "title": picture.title,
                     "url": picture.file.url,
-                    "file_url": generate_custom_presigned_url(picture.file.name),
                     "uploaded_at": picture.uploaded_at,
                 }
             )
@@ -56,7 +53,7 @@ class DownloadPictureView(View):
     def get(self, request, id):
         picture = get_object_or_404(Picture, id=id)
         return JsonResponse(
-            {"url": generate_custom_presigned_url(picture.file.name)})
+            {"url": picture.file.url})
 
 
 @method_decorator(csrf_exempt, name="dispatch")

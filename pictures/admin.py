@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .utils import generate_custom_presigned_url
 from .models import Picture
 
 
@@ -11,7 +10,7 @@ class PictureAdmin(admin.ModelAdmin):
 
     def file_link(self, obj):
         if obj.file:
-            url = generate_custom_presigned_url(obj.file.name)
+            url = obj.file.url
             return format_html('<a href="{}" target="_blank">Download</a>', url)
         return "-"
 

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     # apps
     'pictures',
     # tools
-    'storages',
+
 ]
 
 MIDDLEWARE = [
@@ -59,14 +59,27 @@ STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
+            "bucket_name": os.getenv('DO_SPACES_SPACE_NAME'),
+            "access_key": os.getenv('DO_ACCESS_KEY'),
+            "secret_key": os.getenv('DO_SECRET_KEY'),
+            "region_name": os.getenv('DO_REGION'),
+            "endpoint_url": os.getenv('DO_SPACES_ENDPOINT_URL'),
+            "default_acl": "public-read",
             "location": "media",
+            # required for the correct storage.exists() functioning
             "file_overwrite": False,
+            # don't append any authentication parameters to the files.
+            "querystring_auth": False,
         },
     },
     "staticfiles": {
+        # For static files, use file-system storage
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        # Or Whitenoise storage
+        # "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
+MEDIA_URL = "https://imagespets.nyc3.digitaloceanspaces.com/imagespets/media/"
 
 ROOT_URLCONF = 'adoptab.urls'
 
@@ -104,16 +117,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.\
+            auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.\
+            auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.\
+            auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.\
+            auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -129,21 +146,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+USE_SPACES = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = "static/"
-
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    # "/var/www/static/",
 ]
-
-AWS_ACCESS_KEY_ID = str(os.getenv("AWS_ACCESS_KEY_ID"))
-AWS_SECRET_ACCESS_KEY = str(os.getenv("AWS_SECRET_ACCESS_KEY"))
-AWS_STORAGE_BUCKET_NAME = str(os.getenv("AWS_STORAGE_BUCKET_NAME"))
-AWS_S3_REGION_NAME = str(os.getenv("AWS_S3_REGION_NAME"))
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
