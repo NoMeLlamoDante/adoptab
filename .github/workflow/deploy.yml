@@ -1,0 +1,11 @@
+name: Deploy to server
+
+on:
+    - push
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: HOLA MUNDO
+              run: echo "HOLA MUNDO, PYTHON!"
