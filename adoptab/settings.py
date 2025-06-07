@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     # apps
     'pictures',
     # tools
-
 ]
 
 MIDDLEWARE = [
@@ -51,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 STORAGES = {
@@ -72,9 +73,9 @@ STORAGES = {
     },
     "staticfiles": {
         # For static files, use file-system storage
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        # "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         # Or Whitenoise storage
-        # "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 MEDIA_URL = "https://imagespets.nyc3.digitaloceanspaces.com/imagespets/media/"
@@ -156,7 +157,7 @@ USE_TZ = True
 USE_SPACES = True
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
