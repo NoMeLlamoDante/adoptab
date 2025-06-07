@@ -53,8 +53,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
 ]
 
-if DEBUG:
-    pass
 
 STORAGES = {
     "default": {
