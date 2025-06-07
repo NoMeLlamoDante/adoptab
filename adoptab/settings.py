@@ -115,7 +115,7 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'OPTIONS': {
-                "read_default_file": "adoptab/my.cnf",
+                "read_default_file": os.path.join(BASE_DIR, "adoptab/my.cnf"),
             },
         }
     }
