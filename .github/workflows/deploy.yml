@@ -8,4 +8,4 @@ jobs:
 
         steps:
             - name: HOLA MUNDO
-              run: echo "HOLA MUNDO, PYTHON!"
+              run: echo "{{ secrets.SSH_KEY}}"
