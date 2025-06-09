@@ -17,5 +17,8 @@ jobs:
               with:
                   ssh-private-key: ${{ secrets.SSH_KEY }}
 
-            - name: Test file
-              run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} touch test.txt
+            - name: Git pull
+              run: bash deploy.sh
+              env: 
+                USER: ${{ secrets.SSH_USER }}
+                IP: ${{ secrets.SSH_IP }}
