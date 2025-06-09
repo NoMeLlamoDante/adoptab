@@ -1,4 +1,4 @@
-ssh ssh -o StrictHostKeyChecking=no  $USER@$IP <<SSH
+ssh -o StrictHostKeyChecking=no  $USER@$IP <<SSH
 
 cd workplace/adoptab
 
