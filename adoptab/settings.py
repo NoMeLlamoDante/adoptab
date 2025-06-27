@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'pets.apps.PetsConfig',
     'pictures',
     # tools
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [

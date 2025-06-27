@@ -1,24 +1,29 @@
 from django.db import models
 
 
-SPECIES_CHOICES = {
-    "cat": "Gato",
-    "dog": "Perro"}
-SEX_CHOICES = {
-    "M": "Macho",
-    "F": "Hembra"}
-SIZE_CHOICES = {
-    'S': 'Chico',
-    'M': 'Mediano',
-    'L': 'Grande'}
-HAIR_CHOICES = {
-    'S': 'Corto',
-    'M': 'Mediano',
-    'L': 'Largo'}
-STATUS_CHOICES = {
-    'OK': 'Normal',
-    'SK': 'Enfermo',
-    'DF': 'Fallecido'}
+SPECIES_CHOICES = [
+    ("cat", "Gato"),
+    ("dog", "Perro"),
+]
+SEX_CHOICES = [
+    ("M", "Macho"),
+    ("F", "Hembra"),
+]
+SIZE_CHOICES = [
+    ('S', 'Chico'),
+    ('M', 'Mediano'),
+    ('L', 'Grande'),
+]
+HAIR_CHOICES = [
+    ('S', 'Corto'),
+    ('M', 'Mediano'),
+    ('L', 'Largo'),
+]
+STATUS_CHOICES = [
+    ('OK', 'Normal'),
+    ('SK', 'Enfermo'),
+    ('DF', 'Fallecido'),
+]
 
 
 # Create your models here.
@@ -48,7 +53,7 @@ class Pet(models.Model):
         choices=SIZE_CHOICES, default="M")
     in_adopt = models.BooleanField(
         "En Adopción",
-        default=False,)
+        default=True)
     bio = models.TextField(
         max_length=250,
         help_text="Datos de la mascota")
