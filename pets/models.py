@@ -28,6 +28,7 @@ STATUS_CHOICES = [
 
 # Create your models here.
 class Pet(models.Model):
+    """Pet Basic info"""
     name = models.CharField(
         "Nombre", max_length=100)
     birth_date = models.DateField(
@@ -61,7 +62,7 @@ class Pet(models.Model):
         max_length=2,
         choices=STATUS_CHOICES, default="Normal")
     owner = models.CharField(
-        "Dueño", max_length=50,
+        "Dueño", max_length=1,
         blank=True)
 
     def __str__(self):

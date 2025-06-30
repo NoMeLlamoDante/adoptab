@@ -6,23 +6,61 @@
 {% block title %}
   {{ title }}
 {% endblock %}
+
 {% block content %}
   <div class="container">
-    <div class="row">
-      <div class="col">
-        <h1>{{ title }}</h1>
+    <div class="row justify-content-center mt-3 mb-5">
+      <div class="col col-auto">
+        <h1 class="display-2">{{ title }}</h1>
       </div>
     </div>
-    <div class="row">
-      <div class="col">
-        <form action="{% url 'add_pet' %}" method="post" class="form">
-          {% csrf_token %}
-          <div class="mb-3">
-            {% bootstrap_form form %}
+    <form action="{% url 'add_pet' %}" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form_errors form type='non_fields' %}
+      <div class="row justify-content-center">
+        <div class="col col-12 col-sm-10 col-md-8 col-lg-6">
+          {% bootstrap_field form.name %}
+        </div>
+      </div>
+      <div class="row row-cols-2 justify-content-center">
+        <div class="col col-6 col-sm-5 col-md-4 col-lg-3">
+          {% bootstrap_field form.species %}
+        </div>
+        <div class="col col-6 col-sm-5 col-md-4 col-lg-3">
+          {% bootstrap_field form.sex %}
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col col-12 col-sm-10 col-md-8 col-lg-6">
+          {% bootstrap_field form.birth_date %}
+        </div>
+      </div>
+
+      <hr />
+      <div class="row justify-content-center">
+        <div class="col col-12 col-sm-10 col-md-8 col-lg-6">
+          {% bootstrap_field form.bio %}
+        </div>
+      </div>
+      
+      <div class="row row-cols-2 justify-content-center">
+        <div class="col col-6 col-sm-5 col-md-4 col-lg-3">
+          <div class="row">
+            <div class="col">
+              {% bootstrap_field form.breed %}
+            </div>
           </div>
-          {% bootstrap_button button_type='submit' content='Aceptar' %}
-        </form>
+          {% bootstrap_field form.color %}
+        </div>
+        <div class="col col-6 col-sm-5 col-md-4 col-lg-3">
+          {% bootstrap_field form.hair %}
+        </div>
       </div>
-    </div>
+      <div class="row justify-content-center mt-5">
+        <div class="col col-auto">
+          {% bootstrap_button button_type='submit' content='Aceptar' %}
+        </div>
+      </div>
+    </form>
   </div>
 {% endblock %}
