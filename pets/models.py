@@ -1,4 +1,7 @@
+
 from django.db import models
+from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
 
 
 SPECIES_CHOICES = [
@@ -58,6 +61,11 @@ class Pet(models.Model):
     bio = models.TextField(
         max_length=250,
         help_text="Datos de la mascota")
+
+    file = models.ImageField(
+        upload_to="media",
+        blank=True)
+
     status = models.CharField(
         max_length=2,
         choices=STATUS_CHOICES, default="Normal")
@@ -67,3 +75,20 @@ class Pet(models.Model):
 
     def __str__(self):
         return f"{self.species} - {self.name} {"- en adopcion" if self.in_adopt else ""}"
+
+    @property
+    def pet_age(self):
+        """Human pet age in text, in months, years and months or months only"""
+        today = date.today()
+        delta = relativedelta(today, self.birth_date)
+        if delta.years >= 2:
+            return f"{delta.years} años"
+        elif delta.years >= 1:
+            return f"{delta.years} años {delta.months} meses"
+        else:
+            age_in_months = delta.years * 12 + delta.months
+            return f"{age_in_months} meses"
+
+    @property
+    def url_img(self):
+        return self.file.url

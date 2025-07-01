@@ -15,5 +15,12 @@ def add_pet(request):
     else:
         form = PetForm()
 
-    context = {"title": "Mascotas", "form": form}
+    context = {"title": "Nueva mascota", "form": form}
     return render(request, "pets/add_pet.html", context)
+
+
+def index(request):
+
+    pets = Pet.objects.all()
+    context = {"title": "Lista Mascotas", "pets": pets}
+    return render(request, "pets/index.html", context)
