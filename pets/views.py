@@ -27,6 +27,16 @@ def add_pet(request):
     return render(request, "pets/add_pet.html", context)
 
 
+def detail_pet(request, id):
+    """Vista de datos de mascota"""
+    pet = get_object_or_404(Pet, pk=id)
+    context = {
+        "title": pet.name,
+        "pet": pet
+    }
+    return render(request, "pets/detail_pet.html", context)
+
+
 def update_pet(request, id):
     """Actualizar datos de mascota """
     pet = get_object_or_404(Pet, pk=id)
