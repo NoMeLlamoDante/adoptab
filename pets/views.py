@@ -20,7 +20,6 @@ def add_pet(request):
 
 
 def index(request):
-
     pets = Pet.objects.all()
     context = {"title": "Lista Mascotas", "pets": pets}
     return render(request, "pets/index.html", context)
@@ -41,3 +40,10 @@ def update_pet(request, id):
         "pet": pet
     }
     return render(request, "pets/update_pet.html", context)
+
+
+def delete_pet(request, id):
+    pet = get_object_or_404(Pet, id=id)
+    pet.file.delete(save=False)
+    pet.delete()
+    return redirect('index')
