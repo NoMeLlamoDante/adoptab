@@ -20,10 +20,14 @@
       <div class="row justify-content-center align-items-center">
         <div class="col col-12 col-lg-6">
           <div class="row justify-content-center align-items-center row-cols-2">
-            <div class="col col-12 col-md-6 col-sm-12">
-              {% if pet.file %}
-                <img src="{{ pet.file.url }}" class="img-fluid" alt="..." width="200" />
-              {% endif %}
+            <div class="col ool-auto col-12 col-md-6 col-sm-12">
+              <div class="row justify-content-center">
+                <div class="col col-auto">
+                  {% if pet.file %}
+                    <img src="{{ pet.file.url }}" class="img-fluid" alt="..." width="200" />
+                  {% endif %}
+                </div>
+              </div>
             </div>
 
             <div class="col col-12 col-md-6 col-sm-12">

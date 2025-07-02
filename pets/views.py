@@ -3,8 +3,16 @@ from .models import Pet
 from .forms import PetForm
 
 
-# Create your views here.
+# Create your views here
+def index(request):
+    """Lista de mascotas """
+    pets = Pet.objects.all()
+    context = {"title": "Lista Mascotas", "pets": pets}
+    return render(request, "pets/index.html", context)
+
+
 def add_pet(request):
+    """ Vista para añadir nuevas mascotas"""
     if request.method == 'POST':
         form = PetForm(request.POST)
 
@@ -19,17 +27,15 @@ def add_pet(request):
     return render(request, "pets/add_pet.html", context)
 
 
-def index(request):
-    pets = Pet.objects.all()
-    context = {"title": "Lista Mascotas", "pets": pets}
-    return render(request, "pets/index.html", context)
-
-
 def update_pet(request, id):
+    """Actualizar datos de mascota """
     pet = get_object_or_404(Pet, pk=id)
     form = PetForm(request.POST or None, request.FILES or None, instance=pet)
+
     if request.method == 'POST':
         if form.is_valid():
+            if "file-clear" in request.POST:
+                pet.file.delete(save=True)
             form.save()
             return redirect('index')
         else:
@@ -43,6 +49,7 @@ def update_pet(request, id):
 
 
 def delete_pet(request, id):
+    """Eliminar Mascota"""
     pet = get_object_or_404(Pet, id=id)
     pet.file.delete(save=False)
     pet.delete()
