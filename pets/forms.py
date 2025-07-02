@@ -52,7 +52,30 @@ class PetForm(forms.ModelForm):
         initial="M",
     )
 
+    file = forms.ImageField(required=False)
+
+    size = forms.ChoiceField(
+        label="Tamaño",
+        choices=SIZE_CHOICES,
+        widget=forms.RadioSelect,
+        initial="M",
+        required=False
+    )
+
+    status = forms.ChoiceField(
+        choices=STATUS_CHOICES,
+        widget=forms.RadioSelect,
+        initial="Normal",
+        required=False
+    )
+    owner = forms.CharField(
+        label="Dueño",
+        max_length=150,
+        required=False
+    )
+
     class Meta:
         model = Pet
         fields = ["name", "species", "sex", "birth_date",
-                  "bio", "breed", "color", "hair"]
+                  "bio", "breed", "color", "hair", "file"]
+        exclude = ["status", "owner"]

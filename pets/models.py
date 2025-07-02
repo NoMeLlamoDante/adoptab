@@ -64,11 +64,15 @@ class Pet(models.Model):
 
     file = models.ImageField(
         upload_to="media",
-        blank=True)
+        blank=True
+    )
 
     status = models.CharField(
         max_length=2,
-        choices=STATUS_CHOICES, default="Normal")
+        choices=STATUS_CHOICES,
+        default="Normal",
+        blank=False, null=True
+    )
     owner = models.CharField(
         "Dueño", max_length=1,
         blank=True)
@@ -88,7 +92,3 @@ class Pet(models.Model):
         else:
             age_in_months = delta.years * 12 + delta.months
             return f"{age_in_months} meses"
-
-    @property
-    def url_img(self):
-        return self.file.url

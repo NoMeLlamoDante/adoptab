@@ -18,7 +18,9 @@
       {% for pet in pets %}
         <div class="col col-lg-3 col-md-4 col-sm-6">
           <div class="card">
-            <img src="{{ pet.url_img }}" class="card-img-top" alt="..." style="max-height: 350px; object-fit:cover;" />
+            {% if pet.file %}
+              <img src="{{ pet.file.url }}" class="card-img-top" alt="..." style="max-height: 350px; object-fit:cover;" />
+            {% endif %}
             <div class="card-body">
               <h5 class="card-title">
                 {{ pet.name.title }}
@@ -27,7 +29,18 @@
               <h6>{{ pet.pet_age }}</h6>
 
               <p class="card-text">{{ pet.bio }}</p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
+              <div class="row justify-content-center">
+                <div class="col col-auto">
+                  <a href="#" class="btn btn-primary">Ver Detalle</a>
+                </div>
+                {% if True %}
+                  <div class="col col-auto">
+                    <a href="{% url 'update_pet' pet.id %}" class="btn btn-secondary">Editar</a>
+                  </div>
+                {% else %}
+
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
