@@ -20,7 +20,6 @@ def register_view(request):
 
 def login_view(request):
     form = AuthenticationForm(data=request.POST or None)
-
     if request.method == "POST":
         if form.is_valid():
             print("valid")
@@ -29,3 +28,8 @@ def login_view(request):
             return redirect('index')
     return render(
         request, "users/login.html", {"title": "iniciar sesion", "form": form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
