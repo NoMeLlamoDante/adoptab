@@ -1,0 +1,68 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center mt-2 mb-3">
+      <div class="col col-auto">
+        <h1 class="display-2">{{ title }}</h1>
+      </div>
+    </div>
+    <form action="{% url 'update_pet' pet.id %}" method="post" enctype="multipart/form-data" class="form">
+      {% csrf_token %}
+      {% bootstrap_form_errors form type='non_fields' %}
+      <div class="row justify-content-center align-items-center">
+        <div class="col col-12 col-lg-6">
+          <div class="row justify-content-center align-items-center row-cols-2">
+            <div class="col ool-auto col-12 col-md-6 col-sm-12">
+              <div class="row justify-content-center">
+                <div class="col col-auto">
+                  {% if pet.file %}
+                    <img src="{{ pet.file.url }}" class="img-fluid" alt="..." width="200" />
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="col col-12 col-md-6 col-sm-12">
+              {% bootstrap_field form.name %}
+              <div class="row row-cols-2">
+                {% bootstrap_field form.species %}
+                {% bootstrap_field form.sex %}
+              </div>
+              {% bootstrap_field form.birth_date %}
+            </div>
+          </div>
+
+          <hr />
+
+          {% bootstrap_field form.bio %}
+
+          <div class="row row-cols-2">
+            <div class="col">
+              {% bootstrap_field form.breed %}
+              {% bootstrap_field form.file %}
+            </div>
+
+            <div class="col">
+              {% bootstrap_field form.color %}
+              {% bootstrap_field form.hair %}
+            </div>
+          </div>
+
+          <div class="row justify-content-center mb-5">
+            <div class="col col-auto mb-15">
+              {% bootstrap_button button_type='submit' content='Aceptar' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

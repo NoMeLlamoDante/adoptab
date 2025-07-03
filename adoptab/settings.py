@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # apps
+    'pets.apps.PetsConfig',
     'pictures',
     # tools
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [
