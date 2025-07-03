@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # apps
     'pets.apps.PetsConfig',
     'pictures',
+    'users.apps.UsersConfig',
     # tools
     'bootstrap5',
 ]
