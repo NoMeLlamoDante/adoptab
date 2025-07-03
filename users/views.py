@@ -16,3 +16,16 @@ def register_view(request):
         "form": form,
     }
     return render(request, 'users/register.html', context)
+
+
+def login_view(request):
+    form = AuthenticationForm(data=request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            print("valid")
+            user = form.get_user()
+            login(request, user)
+            return redirect('index')
+    return render(
+        request, "users/login.html", {"title": "iniciar sesion", "form": form})
