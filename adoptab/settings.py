@@ -69,7 +69,7 @@ STORAGES = {
             "default_acl": "public-read",
             "location": "media",
             # required for the correct storage.exists() functioning
-            "file_overwrite": False,
+            "file_overwrite": True,
             # don't append any authentication parameters to the files.
             "querystring_auth": False,
         },
@@ -165,3 +165,5 @@ else:
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+LOGIN_URL = '/users/login/'

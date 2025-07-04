@@ -21,6 +21,9 @@
           {% csrf_token %}
           {% bootstrap_form form %}
         </div>
+        {% if next %}
+          <input type="hidden" name="next" value="{{ next }}" />
+        {% endif %}
       </div>
 
       <div class="row text-center justify-content-center">
