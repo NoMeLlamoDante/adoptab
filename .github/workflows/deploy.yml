@@ -17,6 +17,9 @@ jobs:
             #   with:
             #       ssh-private-key: ${{ secrets.SSH_KEY }}
 
+            - name: test var
+              run: "echo ${{ vars.PATH }}"
+
             - name: Update_repo
               uses: yacenturion/ssh-fetch-pull@v1
               with:
