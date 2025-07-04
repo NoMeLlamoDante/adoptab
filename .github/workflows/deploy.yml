@@ -17,8 +17,18 @@ jobs:
               with:
                   ssh-private-key: ${{ secrets.SSH_KEY }}
 
-            - name: Git pull
-              run: bash deploy.sh
-              env: 
-                USER: ${{ secrets.SSH_USER }}
-                IP: ${{ secrets.SSH_IP }}
+            - name: Update_remote_repo
+              uses: yacenturion/ssh-fetch-pull@v1
+              with:
+                  HOST: ${{ secrets.SSH_IP }}
+                  USERNAME: ${{ secrets.SSH_USER }}
+                  SSH_KEY: ${{ secrets.SSH_KEY }}
+                  DEST_PATH: ${{ vars.PATH }}
+                  RUN_BEFORE: "echo 'Starting deployment...'"
+                  RUN_AFTER: "systemctl restart nginx; ls -la"
+
+            # - name: Git pull
+            #   run: bash deploy.sh
+            #   env:
+            #     USER:
+            #     IP:
