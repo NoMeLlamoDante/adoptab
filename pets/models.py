@@ -33,36 +33,35 @@ STATUS_CHOICES = [
 class Pet(models.Model):
     """Pet Basic info"""
     name = models.CharField(
-        "Nombre", max_length=100)
+        max_length=100)
     birth_date = models.DateField(
-        "Fecha nacimiento", help_text="DD/MM/AAAA",
+        help_text="DD/MM/AAAA",
         blank=True, null=True)
     species = models.CharField(
-        "Especie", max_length=3,
+        max_length=3,
         choices=SPECIES_CHOICES, default="Gato")
     breed = models.CharField(
-        "Raza", max_length=50,
+        max_length=50,
         blank=True)
     sex = models.CharField(
-        "Sexo", max_length=1,
+        max_length=1,
         choices=SEX_CHOICES,
         default=SEX_CHOICES[0]
     )
     color = models.CharField(
         max_length=50)
     hair = models.CharField(
-        "Pelaje", max_length=50,
+        max_length=50,
         choices=HAIR_CHOICES,
         default=HAIR_CHOICES[1],
         blank=True
     )
     size = models.CharField(
-        "Tamaño", max_length=1,
+        max_length=1,
         choices=SIZE_CHOICES,
         default=SIZE_CHOICES[1]
     )
     in_adopt = models.BooleanField(
-        "En Adopción",
         default=True)
     bio = models.TextField(
         max_length=250,
@@ -80,7 +79,7 @@ class Pet(models.Model):
         blank=False, null=True
     )
     owner = models.CharField(
-        "Dueño", max_length=1,
+        max_length=1,
         blank=True)
 
     def __str__(self):
