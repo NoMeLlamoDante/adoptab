@@ -27,8 +27,6 @@ jobs:
                   USERNAME: ${{ secrets.SSH_USER }}
                   SSH_KEY: ${{ secrets.SSH_KEY }}
                   DEST_PATH: ${{ vars.PATH }}
-                  RUN_BEFORE: "echo 'Starting deployment...'"
-                  RUN_AFTER: "systemctl restart nginx; ls -la"
 
             # - name: Git pull
             #   run: bash deploy.sh
