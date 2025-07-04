@@ -3,6 +3,7 @@ from django.urls import path
 from .views import register_view, login_view, logout_view
 from django.views.generic import TemplateView
 
+app_name = "users"
 
 urlpatterns = [
     path('register/', register_view, name="register"),

@@ -3,6 +3,7 @@ from django.urls import path
 from .views import index, add_pet, detail_pet, update_pet, delete_pet
 from django.views.generic import TemplateView
 
+app_name = "pets"
 
 urlpatterns = [
     path('', index, name="index"),

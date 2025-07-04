@@ -10,7 +10,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('index')
+            return redirect('pets:index')
     context = {
         "title": "nuevo usuario",
         "form": form,
@@ -25,11 +25,11 @@ def login_view(request):
             print("valid")
             user = form.get_user()
             login(request, user)
-            return redirect('index')
+            return redirect('pets:index')
     return render(
         request, "users/login.html", {"title": "iniciar sesion", "form": form})
 
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('users:login')

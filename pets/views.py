@@ -18,7 +18,7 @@ def add_pet(request):
 
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('pets:index')
 
     else:
         form = PetForm()
@@ -47,7 +47,7 @@ def update_pet(request, id):
             if "file-clear" in request.POST:
                 pet.file.delete(save=True)
             form.save()
-            return redirect('index')
+            return redirect('pets:index')
         else:
             print(form.errors)
     context = {
@@ -63,4 +63,4 @@ def delete_pet(request, id):
     pet = get_object_or_404(Pet, id=id)
     pet.file.delete(save=False)
     pet.delete()
-    return redirect('index')
+    return redirect('pets:index')

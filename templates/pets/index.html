@@ -31,11 +31,11 @@
               <p class="card-text">{{ pet.bio }}</p>
               <div class="row justify-content-center">
                 <div class="col col-auto">
-                  <a href="{% url 'detail_pet' pet.id %}" class="btn btn-primary">Ver Detalle</a>
+                  <a href="{% url 'pets:detail_pet' pet.id %}" class="btn btn-primary">Ver Detalle</a>
                 </div>
                 {% if True %}
                   <div class="col col-auto">
-                    <a href="{% url 'update_pet' pet.id %}" class="btn btn-secondary">Editar</a>
+                    <a href="{% url 'pets:update_pet' pet.id %}" class="btn btn-secondary">Editar</a>
                   </div>
                 {% else %}
 
