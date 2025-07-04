@@ -12,10 +12,13 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Setup_SSH
-              uses: webfactory/ssh-agent@v0.9.0
-              with:
-                  ssh-private-key: ${{ secrets.SSH_KEY }}
+            # - name: Setup_SSH
+            #   uses: webfactory/ssh-agent@v0.9.0
+            #   with:
+            #       ssh-private-key: ${{ secrets.SSH_KEY }}
+
+            - name: test var
+              run: "echo ${{ vars.PATH }}"
 
             - name: Update_repo
               uses: yacenturion/ssh-fetch-pull@v1
