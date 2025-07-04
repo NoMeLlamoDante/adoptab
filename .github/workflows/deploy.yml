@@ -17,13 +17,13 @@ jobs:
               with:
                   ssh-private-key: ${{ secrets.SSH_KEY }}
 
-            - name: Update_remote_repo
+            - name: Update_repo
               uses: yacenturion/ssh-fetch-pull@v1
               with:
                   HOST: ${{ secrets.SSH_IP }}
                   USERNAME: ${{ secrets.SSH_USER }}
                   SSH_KEY: ${{ secrets.SSH_KEY }}
-                  DEST_PATH: ${{ vars.PATH }}
+                  DEST_PATH: "$PATH"
                   RUN_BEFORE: "echo 'Starting deployment...'"
                   RUN_AFTER: "systemctl restart nginx; ls -la"
 
