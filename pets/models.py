@@ -45,16 +45,22 @@ class Pet(models.Model):
         blank=True)
     sex = models.CharField(
         "Sexo", max_length=1,
-        choices=SEX_CHOICES, default="Macho")
+        choices=SEX_CHOICES,
+        default=SEX_CHOICES[0]
+    )
     color = models.CharField(
         max_length=50)
     hair = models.CharField(
         "Pelaje", max_length=50,
-        choices=HAIR_CHOICES, default="M",
-        blank=True)
+        choices=HAIR_CHOICES,
+        default=HAIR_CHOICES[1],
+        blank=True
+    )
     size = models.CharField(
         "Tamaño", max_length=1,
-        choices=SIZE_CHOICES, default="M")
+        choices=SIZE_CHOICES,
+        default=SIZE_CHOICES[1]
+    )
     in_adopt = models.BooleanField(
         "En Adopción",
         default=True)
@@ -70,7 +76,7 @@ class Pet(models.Model):
     status = models.CharField(
         max_length=2,
         choices=STATUS_CHOICES,
-        default="Normal",
+        default=STATUS_CHOICES[1],
         blank=False, null=True
     )
     owner = models.CharField(

@@ -8,6 +8,9 @@ source env/bin/activate
 
 pip install -r requirements.txt 
 
+make mg
+
+
 python3 manage.py collectstatic --noinput
 
 SSH
