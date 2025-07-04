@@ -1,0 +1,50 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center mt-3 mb-5">
+      <div class="col col-auto">
+        <h1 class="display-5">{{ title }}</h1>
+      </div>
+    </div>
+    <div class="row row-cols-auto">
+      {% for pet in pets %}
+        <div class="col col-lg-3 col-md-4 col-sm-6">
+          <div class="card">
+            {% if pet.file %}
+              <img src="{{ pet.file.url }}" class="card-img-top" alt="..." style="max-height: 350px; object-fit:cover;" />
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">
+                {{ pet.name.title }}
+                <img src="{% static 'img/'|add:pet.species|add:'_'|add:pet.sex|add:'.svg' %}" alt="" style="width: 2rem; height: 2rem;" />
+              </h5>
+              <h6>{{ pet.pet_age }}</h6>
+
+              <p class="card-text">{{ pet.bio }}</p>
+              <div class="row justify-content-center">
+                <div class="col col-auto">
+                  <a href="{% url 'pets:detail_pet' pet.id %}" class="btn btn-primary">Ver Detalle</a>
+                </div>
+                {% if True %}
+                  <div class="col col-auto">
+                    <a href="{% url 'pets:update_pet' pet.id %}" class="btn btn-secondary">Editar</a>
+                  </div>
+                {% else %}
+
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

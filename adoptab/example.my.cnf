@@ -1,0 +1,7 @@
+# my.cnf
+[client]
+database = database_name
+user = user_database
+password = 'password'
+default-character-set = utf8
+ls

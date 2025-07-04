@@ -1,0 +1,100 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col col-12 col-lg-6">
+        <div class="row text-center">
+          <div class="col">
+            <h2 class="display-2">{{ pet.name.title }}</h2>
+          </div>
+        </div>
+
+        <div class="row text-center">
+          <div class="col">
+            <img src="{{ pet.file.url }}" class="img-fluid" alt="" sizes="" srcset="" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <table class="table caption-top">
+              <thead>
+                <tr>
+                  <th scope="col">información</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Nombre</th>
+                  <td>{{ pet.name }}</td>
+                </tr>
+
+                <tr>
+                  <th scope="row">Fecha de nacimiento</th>
+                  <td>{{ pet.birth_date }} - {{ pet.pet_age }}</td>
+                </tr>
+
+                <tr>
+                  <th scope="row">Acerca de</th>
+                  <td>{{ pet.bio }}</td>
+                </tr>
+
+                <tr>
+                  <th scope="row">Raza</th>
+                  <td>{{ pet.breed }}</td>
+                </tr>
+
+                <tr>
+                  <th scope="row">Sexo</th>
+                  <td>
+                    {% if pet.sex == 'M' %}
+                      Macho
+                    {% else %}
+                      Hembra
+                    {% endif %}
+                  </td>
+                </tr>
+
+                <tr>
+                  <th scope="row">Pelaje</th>
+                  <td>
+                    {{ pet.color }} -{% if pet.hair == 'S' %}
+                      Corto
+                    {% elif pet.hair == 'M' %}
+                      Mediano
+                    {% else %}
+                      Largo
+                    {% endif %}
+                  </td>
+                </tr>
+
+                <tr>
+                  <th scope="row">Tamaño</th>
+                  <td>
+                    {% if pet.hair == 'S' %}
+                      Chico
+                    {% elif pet.hair == 'M' %}
+                      Mediano
+                    {% else %}
+                      Grande
+                    {% endif %}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col"></div>
+    </div>
+  </div>
+{% endblock %}
