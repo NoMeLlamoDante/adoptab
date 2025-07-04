@@ -21,7 +21,7 @@ jobs:
               run: "echo ${{ vars.PATH }}"
 
             - name: Update_repo
-              uses: yacenturion/ssh-fetch-pull@v1
+              uses: YaCenturion/ssh-fetch-pull@v2
               with:
                   HOST: ${{ secrets.SSH_IP }}
                   USERNAME: ${{ secrets.SSH_USER }}
