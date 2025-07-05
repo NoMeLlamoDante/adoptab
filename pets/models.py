@@ -39,14 +39,16 @@ class Pet(models.Model):
         blank=True, null=True)
     species = models.CharField(
         max_length=3,
-        choices=SPECIES_CHOICES, default="Gato")
+        choices=SPECIES_CHOICES,
+        default=SPECIES_CHOICES[0],
+    )
     breed = models.CharField(
         max_length=50,
         blank=True)
     sex = models.CharField(
         max_length=1,
         choices=SEX_CHOICES,
-        default=SEX_CHOICES[0]
+        default=SEX_CHOICES[0],
     )
     color = models.CharField(
         max_length=50)
