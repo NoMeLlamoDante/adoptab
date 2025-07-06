@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 python3 manage.py collectstatic --noinput
 
-systemctl restart nginx
-systemctl restart gunicorn
+sudo systemctl restart nginx
+sudo systemctl restart gunicorn
 
 SSH
