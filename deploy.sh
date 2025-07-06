@@ -1,7 +1,7 @@
 ssh -o StrictHostKeyChecking=no  $USER@$IP <<SSH
 set -e
 
-cd ~workplace/adoptab
+cd ~/workplace/adoptab
 
 git reset --hard
 
