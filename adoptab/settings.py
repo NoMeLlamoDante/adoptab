@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # apps
     'pets.apps.PetsConfig',
-    'pictures',
+    # 'pictures',
     'users.apps.UsersConfig',
     # tools
     'bootstrap5',
@@ -155,15 +155,11 @@ USE_TZ = True
 
 USE_SPACES = True
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-if DEBUG:
-    STATIC_URL = os.path.join(BASE_DIR, 'static/')
-else:
-    STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    os.path.join(BASE_DIR, 'static')
 ]
 
 LOGIN_URL = '/users/login/'
