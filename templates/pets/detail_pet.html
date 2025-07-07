@@ -19,7 +19,9 @@
 
         <div class="row text-center">
           <div class="col">
-            <img src="{{ pet.file.url }}" class="img-fluid" alt="" sizes="" srcset="" />
+            {% if pet.file %}
+              <img src="{{ pet.file.url }}" class="img-fluid" alt="" sizes="" srcset="" />
+            {% endif %}
           </div>
         </div>
         <div class="row">
