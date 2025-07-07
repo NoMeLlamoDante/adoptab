@@ -9,6 +9,7 @@ from datetime import datetime
 
 
 class PetForm(forms.ModelForm):
+    """Formulario de mascotas"""
     year = datetime.now().year
 
     name = forms.CharField(
@@ -68,6 +69,7 @@ class PetForm(forms.ModelForm):
         initial="Normal",
         required=False
     )
+
     owner = forms.CharField(
         label="Dueño",
         max_length=150,
