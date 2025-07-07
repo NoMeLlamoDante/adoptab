@@ -41,13 +41,13 @@ class Pet(models.Model):
         default=SPECIES_CHOICES[0])
     breed = models.CharField(max_length=50, blank=True)
     sex = models.CharField(
-        max_length=1, choices=SEX_CHOICES, default=SEX_CHOICES[0])
+        max_length=5, choices=SEX_CHOICES, default=SEX_CHOICES[0])
     color = models.CharField(max_length=50)
     hair = models.CharField(
         max_length=50, choices=HAIR_CHOICES,
         default=HAIR_CHOICES[1], blank=True)
     size = models.CharField(
-        max_length=1, choices=SIZE_CHOICES, default=SIZE_CHOICES[1])
+        max_length=5, choices=SIZE_CHOICES, default=SIZE_CHOICES[1])
     in_adopt = models.BooleanField(default=True)
     bio = models.TextField(max_length=250, help_text="Datos de la mascota")
     file = models.ImageField(upload_to="media/", blank=True, null=True)
