@@ -17,15 +17,24 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         {% if user.is_authenticated %}
           <li>
-            <a class="nav-link ms-auto" href="{% url 'users:logout' %}">Cerrar Sesión</a>
+            <a class="nav-link ms-auto" href="{% url 'users:logout' %}">
+              <i class="bi bi-box-arrow-right"></i>
+              Cerrar Sesión
+            </a>
           </li>
         {% else %}
           <li>
-            <a class="nav-link" href="{% url 'users:login' %}">Iniciar Sesión</a>
+            <a class="nav-link" href="{% url 'users:login' %}">
+              <i class="bi bi-box-arrow-in-left"></i>
+              Iniciar Sesión
+            </a>
           </li>
 
           <li>
-            <a class="nav-link" href="{% url 'users:register' %}">Nuevo Usuario</a>
+            <a class="nav-link" href="{% url 'users:register' %}">
+              <i class="bi bi-person-add"></i>
+              Nuevo Usuario
+            </a>
           </li>
         {% endif %}
       </ul>
