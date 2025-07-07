@@ -57,32 +57,36 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
 ]
 
-
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS": {
-            "bucket_name": os.getenv('DO_SPACES_SPACE_NAME'),
-            "access_key": os.getenv('DO_ACCESS_KEY'),
-            "secret_key": os.getenv('DO_SECRET_KEY'),
-            "region_name": os.getenv('DO_REGION'),
-            "endpoint_url": os.getenv('DO_SPACES_ENDPOINT_URL'),
-            "default_acl": "public-read",
-            "location": "media",
-            # required for the correct storage.exists() functioning
-            "file_overwrite": True,
-            # don't append any authentication parameters to the files.
-            "querystring_auth": False,
+if DEBUG:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "bucket_name": os.getenv('DO_SPACES_SPACE_NAME'),
+                "access_key": os.getenv('DO_ACCESS_KEY'),
+                "secret_key": os.getenv('DO_SECRET_KEY'),
+                "region_name": os.getenv('DO_REGION'),
+                "endpoint_url": os.getenv('DO_SPACES_ENDPOINT_URL'),
+                "default_acl": "public-read",
+                "location": "media",
+                # required for the correct storage.exists() functioning
+                "file_overwrite": True,
+                # don't append any authentication parameters to the files.
+                "querystring_auth": False,
+            },
         },
-    },
-    "staticfiles": {
-        # For static files, use file-system storage
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        # Or Whitenoise storage
-        # "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-MEDIA_URL = "https://imagespets.nyc3.digitaloceanspaces.com/imagespets/media/"
+        "staticfiles": {
+            # For static files, use file-system storage
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            # Or Whitenoise storage
+            # "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    MEDIA_URL = "https://imagespets.nyc3.digitaloceanspaces.com/imagespets/media/"
 
 ROOT_URLCONF = 'adoptab.urls'
 
