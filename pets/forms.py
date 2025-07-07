@@ -66,7 +66,7 @@ class PetForm(forms.ModelForm):
     status = forms.ChoiceField(
         choices=STATUS_CHOICES,
         widget=forms.RadioSelect,
-        initial="Normal",
+        initial="OK",
         required=False
     )
 
@@ -79,5 +79,5 @@ class PetForm(forms.ModelForm):
     class Meta:
         model = Pet
         fields = ["name", "species", "sex", "birth_date",
-                  "bio", "breed", "color", "hair", "file"]
-        exclude = ["status", "owner"]
+                  "bio", "breed", "color", "hair", "file", ]
+        exclude = ["status", "owner", "size"]
