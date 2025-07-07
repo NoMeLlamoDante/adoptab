@@ -59,8 +59,7 @@ class PetForm(forms.ModelForm):
         label="Tamaño",
         choices=SIZE_CHOICES,
         widget=forms.RadioSelect,
-        initial="M",
-        required=False
+        initial='M'
     )
 
     status = forms.ChoiceField(
