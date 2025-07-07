@@ -58,7 +58,7 @@ class Pet(models.Model):
         User, on_delete=models.CASCADE, related_name='pets')
 
     def __str__(self):
-        return f"{self.species} - {self.name} {"- en adopcion" if self.in_adopt else ""}"
+        return f"{self.species} - {self.name} - {self.owner}"
 
     @property
     def pet_age(self):
