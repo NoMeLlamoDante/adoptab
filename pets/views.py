@@ -21,6 +21,8 @@ def add_pet(request):
     if request.method == 'POST':
         if form.is_valid():
             pet = form.save(commit=False)
+            pet.status = 'OK'
+            pet.size = 'M'
             pet.owner = request.user
             pet.save()
             return redirect('pets:index')
