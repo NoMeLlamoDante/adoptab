@@ -19,7 +19,9 @@
 
         <div class="row text-center">
           <div class="col">
-            <img src="{{ pet.file.url }}" class="img-fluid" alt="" sizes="" srcset="" />
+            {% if pet.file %}
+              <img src="{{ pet.file.url }}" class="img-fluid" alt="" sizes="" srcset="" />
+            {% endif %}
           </div>
         </div>
         <div class="row">
@@ -91,10 +93,50 @@
             </table>
           </div>
         </div>
+        <div class="row justify-content-center">
+          {% if user.is_authenticated %}
+            {% if pet.owner.profile.phone %}
+              <div class="col col-auto">
+                <a href="https://wa.me/{{ pet.owner.profile.phone }}" target="_blank" class="btn btn-success">
+                  <i class="bi bi-whatsapp"></i>
+                  Enviar Whataapp
+                </a>
+              </div>
+            {% endif %}
+
+            {% if pet.owner.email %}
+              <div class="col col-auto mb-5">
+                <a href="mailto:{{ pet.owner.email }}" target="_blank" class="btn btn-primary">
+                  <i class="bi bi-envelope-at-fill"></i>
+                  Enviar correo
+                </a>
+              </div>
+            {% endif %}
+
+            {% if user.id == pet.owner.id %}
+              <div class="col col-auto">
+                <a href="{% url 'pets:update_pet' pet.id %}" class="btn btn-secondary">
+                  <i class="bi bi-pencil"></i>
+                  Editar
+                </a>
+              </div>
+
+              <div class="col col-auto">
+                <a href="{% url 'pets:delete_pet' pet.id %}" class="btn btn-danger">
+                  <i class="bi bi-eraser"></i>
+                  Borrar mascota
+                </a>
+              </div>
+            {% endif %}
+          {% else %}
+            <div class="col col-auto mb-5">
+              <div class="col mt-3 mb-5">
+                <a href="{% url 'users:login' %}" class="link-opacity-50-hover">¿Quieres ver los datos? Entonces inicia sesión</a>
+              </div>
+            </div>
+          {% endif %}
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col"></div>
     </div>
   </div>
 {% endblock %}
