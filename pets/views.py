@@ -17,9 +17,12 @@ def index(request):
 def add_pet(request):
     """ Vista para añadir nuevas mascotas"""
     form = PetForm(request.POST or None, request.FILES or None)
+
     if request.method == 'POST':
         if form.is_valid():
             pet = form.save(commit=False)
+            pet.status = 'OK'
+            pet.size = 'M'
             pet.owner = request.user
             pet.save()
             return redirect('pets:index')
