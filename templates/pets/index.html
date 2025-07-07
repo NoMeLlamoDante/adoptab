@@ -37,7 +37,10 @@
 
                 {% if user.is_authenticated and user.id == pet.owner.id %}
                   <div class="col col-auto">
-                    <a href="{% url 'pets:update_pet' pet.id %}" class="btn btn-secondary">Editar</a>
+                    <a href="{% url 'pets:update_pet' pet.id %}" class="btn btn-secondary">
+                      <i class="bi bi-pencil"></i>
+                      Editar
+                    </a>
                   </div>
                 {% endif %}
               </div>
