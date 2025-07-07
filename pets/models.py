@@ -47,12 +47,8 @@ class Pet(models.Model):
         max_length=1, choices=HAIR_CHOICES,
         default=HAIR_CHOICES[1], blank=True)
     size = models.CharField(
-<<<<<<< HEAD
-        max_length=5, choices=SIZE_CHOICES, default=SIZE_CHOICES[1])
-=======
         max_length=1, choices=SIZE_CHOICES,
         default=SIZE_CHOICES[1], blank=True, null=True)
->>>>>>> origin
     in_adopt = models.BooleanField(default=True)
     bio = models.TextField(max_length=250, help_text="Datos de la mascota")
     file = models.ImageField(upload_to="media/", blank=True, null=True)
