@@ -1,7 +1,8 @@
 
 from django.db import models
-from datetime import datetime, date
+from datetime import date
 from dateutil.relativedelta import relativedelta
+from django.contrib.auth.models import User
 
 
 SPECIES_CHOICES = [
@@ -32,57 +33,29 @@ STATUS_CHOICES = [
 # Create your models here.
 class Pet(models.Model):
     """Pet Basic info"""
-    name = models.CharField(
-        max_length=100)
+    name = models.CharField(max_length=100)
     birth_date = models.DateField(
-        help_text="DD/MM/AAAA",
-        blank=True, null=True)
+        help_text="DD/MM/AAAA", blank=True, null=True)
     species = models.CharField(
-        max_length=3,
-        choices=SPECIES_CHOICES,
-        default=SPECIES_CHOICES[0],
-    )
-    breed = models.CharField(
-        max_length=50,
-        blank=True)
+        max_length=3, choices=SPECIES_CHOICES,
+        default=SPECIES_CHOICES[0])
+    breed = models.CharField(max_length=50, blank=True)
     sex = models.CharField(
-        max_length=1,
-        choices=SEX_CHOICES,
-        default=SEX_CHOICES[0],
-    )
-    color = models.CharField(
-        max_length=50)
+        max_length=1, choices=SEX_CHOICES, default=SEX_CHOICES[0])
+    color = models.CharField(max_length=50)
     hair = models.CharField(
-        max_length=50,
-        choices=HAIR_CHOICES,
-        default=HAIR_CHOICES[1],
-        blank=True
-    )
+        max_length=50, choices=HAIR_CHOICES,
+        default=HAIR_CHOICES[1], blank=True)
     size = models.CharField(
-        max_length=1,
-        choices=SIZE_CHOICES,
-        default=SIZE_CHOICES[1]
-    )
-    in_adopt = models.BooleanField(
-        default=True)
-    bio = models.TextField(
-        max_length=250,
-        help_text="Datos de la mascota")
-
-    file = models.ImageField(
-        upload_to="media",
-        blank=True
-    )
-
+        max_length=1, choices=SIZE_CHOICES, default=SIZE_CHOICES[1])
+    in_adopt = models.BooleanField(default=True)
+    bio = models.TextField(max_length=250, help_text="Datos de la mascota")
+    file = models.ImageField(upload_to="media/", blank=True, null=True)
     status = models.CharField(
-        max_length=2,
-        choices=STATUS_CHOICES,
-        default=STATUS_CHOICES[1],
-        blank=False, null=True
-    )
-    owner = models.CharField(
-        max_length=1,
-        blank=True)
+        max_length=2, choices=STATUS_CHOICES, default=STATUS_CHOICES[1],
+        blank=False, null=True)
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='pets')
 
     def __str__(self):
         return f"{self.species} - {self.name} {"- en adopcion" if self.in_adopt else ""}"

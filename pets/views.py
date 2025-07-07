@@ -16,15 +16,13 @@ def index(request):
 @login_required
 def add_pet(request):
     """ Vista para añadir nuevas mascotas"""
+    form = PetForm(request.POST or None, request.FILES or None)
     if request.method == 'POST':
-        form = PetForm(request.POST)
-
         if form.is_valid():
-            form.save()
+            pet = form.save(commit=False)
+            pet.owner = request.user
+            pet.save()
             return redirect('pets:index')
-
-    else:
-        form = PetForm()
 
     context = {"title": "Nueva mascota", "form": form}
     return render(request, "pets/add_pet.html", context)
