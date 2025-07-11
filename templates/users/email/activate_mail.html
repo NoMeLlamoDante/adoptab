@@ -1,0 +1,13 @@
+{% autoescape off %}
+  <h3>Hola {{ user.username }},</h3>
+
+  Para poder activar tu cuenta en {{ domain }} por favor, presiona el botón a continuación:
+
+  <br /><br />
+
+  <a href="{{ activation_url }}">Verificar correo</a>
+
+  <br /><br />
+
+  Si el botón no funciona, porfavor intenta copiar y pegar la siguiente URL en una nueva ventana de navegador.%
+{% endautoescape %}
