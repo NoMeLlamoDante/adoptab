@@ -1,24 +1,22 @@
+from .models import User
+from .tokens import user_activation_token, password_reset_token
+from adoptab import settings
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 
 from .forms import CustomUserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth import login, logout
 
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-
-from django.urls import reverse
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from adoptab import settings
-
-from .tokens import user_activation_token
-from .models import User
 
 
 # Create your views here.
@@ -111,3 +109,88 @@ def activate_view(request, uidb64, token):
         messages.add_message(request, messages.WARNING,
                              "El link de activación es inválido.")
     return redirect('index')
+
+
+@require_http_methods(["GET", "POST"])
+def password_reset_view(request):
+    """Vista para solicitar correo de recuperar contraseña"""
+    form = PasswordResetForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        email = request.POST.get("email")
+        qs = User.objects.filter(email=email)
+
+        if len(qs) > 0:
+            # flags
+            user = qs[0]
+            user.profile.reset_password = True
+            user.save()
+
+            # Email data
+            uidb64 = urlsafe_base64_encode(force_bytes(user.id))
+            token = password_reset_token.make_token(user)
+            reset_link = request.build_absolute_uri(
+                reverse('users:new_password', kwargs={
+                        "uidb64": uidb64, "token": token})
+            )
+            text_message = render_to_string('users/email/reset_mail.html', {
+                'user': user,
+                'reset_url': reset_link
+            })
+
+            send_mail(
+                subject="Recupera tu contraseña",
+                message=text_message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[user.email],
+            )
+
+            messages.add_message(
+                request, messages.WARNING,
+                "El correo fue enviado con éxito, revise su carpeta de SPAM")
+            return redirect("users:login")
+        else:
+            messages.add_message(
+                request, messages.ERROR,
+                "No se encuentra ninguna cuenta asociada a este correo")
+    context = {
+        "title": "Contraseña Olvidada",
+        "form": form,
+    }
+    return render(request, "users/password_reset.html", context)
+
+
+@require_http_methods(["GET", "POST"])
+def new_password_view(request, uidb64, token):
+    """Vista para establecer contraseña nueva"""
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = get_object_or_404(User, pk=uid)
+
+    except (TypeError, ValueError, OverflowError):
+        messages.add_message(request, messages.WARNING, 'link inválido')
+        user = None
+        return redirect("users:login")
+
+    finally:
+        form = SetPasswordForm(user or None, request.POST or None)
+
+    if user and request.method == "POST":
+        if password_reset_token.check_token(user, token) and form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.add_message(request, messages.SUCCESS,
+                                 "Contraseña cambiada con éxito")
+            user.profile.reset_password = False
+            user.save()
+            return redirect("pets:index")
+        else:
+            messages.add_message(request, messages.WARNING, 'link inválido')
+            return redirect("users:login")
+
+    context = {
+        'title': 'Nueva contraseña',
+        'form': form,
+        'uid': uidb64,
+        'token': token
+    }
+    return render(request, "users/new_password.html", context)
