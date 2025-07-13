@@ -1,4 +1,4 @@
-from .models import User
+from .models import User, Profile
 from .tokens import user_activation_token, password_reset_token
 from adoptab import settings
 from django.template.loader import render_to_string
@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, UpdateUserForm, UpdateProfileForm
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth import login, logout
@@ -82,7 +82,7 @@ def login_view(request):
 
 
 @login_required
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET"])
 def logout_view(request):
     logout(request)
     return redirect('users:login')
@@ -199,7 +199,7 @@ def new_password_view(request, uidb64, token):
 
 
 @login_required
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET"])
 def profile_view(request):
     """Vista de detalles del usuario"""
     user = get_object_or_404(User, id=request.user.id)
@@ -209,3 +209,40 @@ def profile_view(request):
         "user_info": user,
     }
     return render(request, "users/profile_details.html", context)
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def profile_update(request):
+    """Editar datos del usuario"""
+    user = get_object_or_404(User, id=request.user.id)
+    user_form = UpdateUserForm(request.POST or None, instance=user)
+    profile_form = UpdateProfileForm(
+        request.POST or None, instance=user.profile)
+
+    if request.method == 'POST' and user_form.is_valid() and profile_form.is_valid():
+        user_form.save()
+        profile_form.save()
+        messages.add_message(request, messages.SUCCESS,
+                             "Se han guardado los cambios")
+        return redirect('users:profile')
+
+    context = {
+        "title": "iniciar sesion",
+        "user_form": user_form,
+        "profile_form": profile_form,
+    }
+    return render(request, "users/profile_update.html", context)
+
+
+@login_required
+@require_http_methods(["GET"])
+def delete_view(request):
+    """Eliminar usuario"""
+    user = get_object_or_404(User, id=request.user.id)
+    print(user)
+    user.delete()
+    logout(request)
+    messages.add_message(request, messages.SUCCESS,
+                         "Usuario eliminado correctamente")
+    return redirect('users:login')

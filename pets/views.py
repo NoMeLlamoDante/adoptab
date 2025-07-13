@@ -53,8 +53,6 @@ def update_pet(request, id):
                 pet.file.delete(save=True)
             form.save()
             return redirect('pets:index')
-        else:
-            print(form.errors)
     context = {
         "title": "Actualizar Datos",
         "form": form,

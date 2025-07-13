@@ -24,6 +24,7 @@
             {% endif %}
           </div>
         </div>
+        {% include 'common/messages.html' %}
         <div class="row">
           <div class="col">
             <table class="table caption-top">
@@ -90,37 +91,36 @@
         </div>
         <div class="row justify-content-center">
           {% if user.is_authenticated %}
-            {% if pet.owner.profile.phone %}
+            {% if user.id == user_info.id %}
               <div class="col col-auto">
-                <a href="https://wa.me/{{ pet.owner.profile.phone }}" target="_blank" class="btn btn-success">
-                  <i class="bi bi-whatsapp"></i>
-                  Enviar Whataapp
-                </a>
-              </div>
-            {% endif %}
-
-            {% if pet.owner.email %}
-              <div class="col col-auto mb-5">
-                <a href="mailto:{{ pet.owner.email }}" target="_blank" class="btn btn-primary">
-                  <i class="bi bi-envelope-at-fill"></i>
-                  Enviar correo
-                </a>
-              </div>
-            {% endif %}
-
-            {% if user.id == pet.owner.id %}
-              <div class="col col-auto">
-                <a href="{% url 'pets:update_pet' pet.id %}" class="btn btn-secondary">
+                <a href="{% url 'users:profile_update' %}" class="btn btn-secondary">
                   <i class="bi bi-pencil"></i>
                   Editar
                 </a>
               </div>
 
               <div class="col col-auto">
-                <a href="{% url 'pets:delete_pet' pet.id %}" class="btn btn-danger">
+                <!-- Button -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete">
                   <i class="bi bi-eraser"></i>
-                  Borrar mascota
-                </a>
+                  Eliminar Cuenta
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deleteLabel">Borrar Cuenta</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">Realmente, ¿Quiere eliminar su cuenta?</div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <a class="btn btn-danger" href="{% url 'users:profile_delete' %}"><i class="bi bi-eraser"></i>Eliminar</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             {% endif %}
           {% else %}
