@@ -14,6 +14,7 @@
         <h1 class="display-5">{{ title }}</h1>
       </div>
     </div>
+    {% include 'common/messages.html' %}
     <div class="row row-cols-auto">
       {% for pet in pets %}
         <div class="col col-lg-3 col-md-4 col-sm-6">

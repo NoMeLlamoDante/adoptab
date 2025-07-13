@@ -1,0 +1,13 @@
+{% autoescape off %}
+  <h3>Hola {{ user.username }},</h3>
+
+  Para iniciar el proceso de reestablecer contraseña, presiona el botón a continuación:
+
+  <br /><br />
+
+  <a href="{{ reset_url }}">Resetear contraseña</a>
+
+  <br /><br />
+
+  Si el botón no funciona, porfavor intenta copiar y pegar la siguiente URL en una nueva ventana de navegador.%
+{% endautoescape %}
