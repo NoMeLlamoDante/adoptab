@@ -1,4 +1,4 @@
-from .models import User
+from .models import User, Profile
 from .tokens import user_activation_token, password_reset_token
 from adoptab import settings
 from django.template.loader import render_to_string
@@ -10,10 +10,14 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 
-from .forms import CustomUserCreationForm
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
-from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth import login, logout
+# CRUD
+from .forms import CustomUserCreationForm, UpdateUserForm, UpdateProfileForm
+# Login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout, update_session_auth_hash
+# Password
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import PasswordChangeForm
 
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
@@ -60,6 +64,7 @@ def register_view(request):
     return render(request, 'users/register.html', context)
 
 
+@require_http_methods(["GET", "POST"])
 def login_view(request):
     form = AuthenticationForm(data=request.POST or None)
 
@@ -81,6 +86,7 @@ def login_view(request):
 
 
 @login_required
+@require_http_methods(["GET"])
 def logout_view(request):
     logout(request)
     return redirect('users:login')
@@ -194,3 +200,73 @@ def new_password_view(request, uidb64, token):
         'token': token
     }
     return render(request, "users/new_password.html", context)
+
+
+@login_required
+@require_http_methods(["GET"])
+def profile_view(request):
+    """Vista de detalles del usuario"""
+    user = get_object_or_404(User, id=request.user.id)
+
+    context = {
+        "title": "iniciar sesion",
+        "user_info": user,
+    }
+    return render(request, "users/profile_details.html", context)
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def profile_update(request):
+    """Editar datos del usuario"""
+    user = get_object_or_404(User, id=request.user.id)
+    user_form = UpdateUserForm(request.POST or None, instance=user)
+    profile_form = UpdateProfileForm(
+        request.POST or None, instance=user.profile)
+
+    if request.method == 'POST' and user_form.is_valid() and profile_form.is_valid():
+        user_form.save()
+        profile_form.save()
+        messages.add_message(request, messages.SUCCESS,
+                             "Se han guardado los cambios")
+        return redirect('users:profile')
+
+    context = {
+        "title": "Editar Perfil",
+        "user_form": user_form,
+        "profile_form": profile_form,
+    }
+    return render(request, "users/profile_update.html", context)
+
+
+@login_required
+@require_http_methods(["GET"])
+def delete_view(request):
+    """Eliminar usuario"""
+    user = get_object_or_404(User, id=request.user.id)
+    print(user)
+    user.delete()
+    logout(request)
+    messages.add_message(request, messages.SUCCESS,
+                         "Usuario eliminado correctamente")
+    return redirect('users:login')
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def password_change_view(request):
+    """Actualizar contraseña del usuario"""
+    form = PasswordChangeForm(user=request.user, data=request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        update_session_auth_hash(request, form.user)
+        messages.add_message(request, messages.SUCCESS,
+                             "Contraseña actualizada con éxito")
+        return redirect("pets:index")
+
+    context = {
+        "title": "Cambiar Contraseña",
+        "form": form,
+    }
+    return render(request, "users/password_change.html", context)
