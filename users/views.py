@@ -10,10 +10,14 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 
+# CRUD
 from .forms import CustomUserCreationForm, UpdateUserForm, UpdateProfileForm
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
-from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth import login, logout
+# Login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout, update_session_auth_hash
+# Password
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import PasswordChangeForm
 
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
@@ -228,7 +232,7 @@ def profile_update(request):
         return redirect('users:profile')
 
     context = {
-        "title": "iniciar sesion",
+        "title": "Editar Perfil",
         "user_form": user_form,
         "profile_form": profile_form,
     }
@@ -246,3 +250,23 @@ def delete_view(request):
     messages.add_message(request, messages.SUCCESS,
                          "Usuario eliminado correctamente")
     return redirect('users:login')
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def password_change_view(request):
+    """Actualizar contraseña del usuario"""
+    form = PasswordChangeForm(user=request.user, data=request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        update_session_auth_hash(request, form.user)
+        messages.add_message(request, messages.SUCCESS,
+                             "Contraseña actualizada con éxito")
+        return redirect("pets:index")
+
+    context = {
+        "title": "Cambiar Contraseña",
+        "form": form,
+    }
+    return render(request, "users/password_change.html", context)

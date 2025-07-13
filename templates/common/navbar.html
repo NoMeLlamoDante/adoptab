@@ -23,7 +23,7 @@
                 <a href="{% url 'users:profile' %}" class="dropdown-item"><i class="bi bi-person-lines-fill"></i>&ensp;Perfil</a>
               </li>
               <li>
-                <a href="#" class="dropdown-item"><i class="bi bi-key"></i>&ensp;Cambiar Contraseña</a>
+                <a href="{% url 'users:password_change' %}" class="dropdown-item"><i class="bi bi-key"></i>&ensp;Cambiar Contraseña</a>
               </li>
               <li>
                 <a class="dropdown-item" href="{% url 'users:logout' %}"><i class="bi bi-box-arrow-right"></i>&ensp;Cerrar Sesión</a>
