@@ -60,6 +60,7 @@ def register_view(request):
     return render(request, 'users/register.html', context)
 
 
+@require_http_methods(["GET", "POST"])
 def login_view(request):
     form = AuthenticationForm(data=request.POST or None)
 
@@ -81,6 +82,7 @@ def login_view(request):
 
 
 @login_required
+@require_http_methods(["GET", "POST"])
 def logout_view(request):
     logout(request)
     return redirect('users:login')
@@ -194,3 +196,16 @@ def new_password_view(request, uidb64, token):
         'token': token
     }
     return render(request, "users/new_password.html", context)
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def profile_view(request):
+    """Vista de detalles del usuario"""
+    user = get_object_or_404(User, id=request.user.id)
+
+    context = {
+        "title": "iniciar sesion",
+        "user_info": user,
+    }
+    return render(request, "users/profile_details.html", context)

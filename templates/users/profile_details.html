@@ -1,0 +1,137 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col col-12 col-lg-6">
+        <div class="row text-center">
+          <div class="col">
+            <h2 class="display-2">Perfil</h2>
+          </div>
+        </div>
+
+        <div class="row text-center">
+          <div class="col">
+            {% if user.file %}
+              <img src="{{ user.file.url }}" class="img-fluid" alt="" sizes="" srcset="" />
+            {% endif %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <table class="table caption-top">
+              <thead>
+                <tr>
+                  <th scope="col">Información Personal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Nombre</th>
+                  <td>
+                    {% if user_info.profile.full_name %}
+                      {{ user_info.profile.full_name }}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Acerca de</th>
+                  <td>
+                    {% if user_info.profile.bio %}
+                      {{ user_info.profile.bio }}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <br /><br />
+            <table class="table caption-top">
+              <thead>
+                <tr>
+                  <th scope="col">Información de contacto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">correo</th>
+                  <td>
+                    {% if user_info.email %}
+                      {{ user_info.email }}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
+                </tr>
+
+                <tr>
+                  <th scope="row">telefono</th>
+                  <td>
+                    {% if user_info.profile.phone %}
+                      {{ user_info.profile.phone }}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          {% if user.is_authenticated %}
+            {% if pet.owner.profile.phone %}
+              <div class="col col-auto">
+                <a href="https://wa.me/{{ pet.owner.profile.phone }}" target="_blank" class="btn btn-success">
+                  <i class="bi bi-whatsapp"></i>
+                  Enviar Whataapp
+                </a>
+              </div>
+            {% endif %}
+
+            {% if pet.owner.email %}
+              <div class="col col-auto mb-5">
+                <a href="mailto:{{ pet.owner.email }}" target="_blank" class="btn btn-primary">
+                  <i class="bi bi-envelope-at-fill"></i>
+                  Enviar correo
+                </a>
+              </div>
+            {% endif %}
+
+            {% if user.id == pet.owner.id %}
+              <div class="col col-auto">
+                <a href="{% url 'pets:update_pet' pet.id %}" class="btn btn-secondary">
+                  <i class="bi bi-pencil"></i>
+                  Editar
+                </a>
+              </div>
+
+              <div class="col col-auto">
+                <a href="{% url 'pets:delete_pet' pet.id %}" class="btn btn-danger">
+                  <i class="bi bi-eraser"></i>
+                  Borrar mascota
+                </a>
+              </div>
+            {% endif %}
+          {% else %}
+            <div class="col col-auto mb-5">
+              <div class="col mt-3 mb-5">
+                <a href="{% url 'users:login' %}" class="link-opacity-50-hover">¿Quieres ver los datos? Entonces inicia sesión</a>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
