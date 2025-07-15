@@ -1,0 +1,21 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Agregar fotografía para {{ pet.name }}</h2>
+    <form action="{% url 'pets:photo_add' pet.id %}" method="post" class="form" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit" class="btn btn-primary">Subir foto</button>
+      <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+{% endblock %}

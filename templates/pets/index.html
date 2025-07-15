@@ -33,12 +33,12 @@
 
               <div class="row justify-content-center">
                 <div class="col col-auto">
-                  <a href="{% url 'pets:detail_pet' pet.id %}" class="btn btn-primary">Ver Detalle</a>
+                  <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-primary">Ver Detalle</a>
                 </div>
 
                 {% if user.is_authenticated and user.id == pet.owner.id %}
                   <div class="col col-auto">
-                    <a href="{% url 'pets:update_pet' pet.id %}" class="btn btn-secondary">
+                    <a href="{% url 'pets:pet_update' pet.id %}" class="btn btn-secondary">
                       <i class="bi bi-pencil"></i>
                       Editar
                     </a>
