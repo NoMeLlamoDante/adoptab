@@ -34,13 +34,13 @@
                       <img src="{{ photo.file.url }}" class="img-fluid" style=" width: 100%; max-height: 30vh; object-fit: cover;" />
                     </th>
                     <td>
-                      <a href="{% url 'pets:update_photo' photo.id %}" class="btn btn-secondary">
+                      <a href="{% url 'pets:photo_update' photo.id %}" class="btn btn-secondary">
                         <i class="bi bi-pencil"></i>
                         Cambiar foto
                       </a>
                     </td>
                     <td>
-                      <a href="{% url 'pets:delete_photo' photo.id %}" class="btn btn-danger">
+                      <a href="{% url 'pets:photo_delete' photo.id %}" class="btn btn-danger">
                         <i class="bi bi-eraser"></i>
                         Borrar foto
                       </a>
@@ -54,11 +54,11 @@
         <div class="row justify-content-center">
           {% if user.is_authenticated and user.id == pet.owner.id %}
             <div class="col col-auto mb-3">
-              <a href="{% url 'pets:add_photo' pet.id %}" class="btn btn-primary">
+              <a href="{% url 'pets:photo_add' pet.id %}" class="btn btn-primary">
                 <i class="bi bi-image"></i>
                 Agregar imagenes
               </a>
-              <a href="{% url 'pets:detail_pet' pet.id %}" class="btn btn-secondary me-3">Regresar</a>
+              <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-secondary me-3">Regresar</a>
             </div>
           {% endif %}
         </div>

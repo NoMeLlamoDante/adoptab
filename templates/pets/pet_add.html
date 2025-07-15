@@ -14,7 +14,7 @@
         <h1 class="display-2">{{ title }}</h1>
       </div>
     </div>
-    <form action="{% url 'pets:add_pet' %}" method="post" class="form" enctype="multipart/form-data">
+    <form action="{% url 'pets:pet_add' %}" method="post" class="form" enctype="multipart/form-data">
       {% csrf_token %}
       {% bootstrap_form_errors form type='non_fields' %}
 
