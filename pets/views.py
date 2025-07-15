@@ -20,7 +20,7 @@ def index_view(request):
 @require_http_methods(["GET", "POST"])
 def pet_add_view(request):
     """ Vista para añadir nuevas mascotas"""
-    form = PetForm(request.POST or None, request.FILES or None)
+    form = PetForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
         pet = form.save(commit=False)
@@ -51,14 +51,11 @@ def pet_detail_view(request, id):
 def pet_update_view(request, id):
     """Actualizar datos de mascota """
     pet = get_object_or_404(Pet, pk=id)
-    form = PetForm(request.POST or None, request.FILES or None, instance=pet)
+    form = PetForm(request.POST or None instance=pet)
 
-    if request.method == 'POST':
-        if form.is_valid():
-            if "file-clear" in request.POST:
-                pet.file.delete(save=True)
-            form.save()
-            return redirect('pets:pet_detail', id=pet.id)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('pets:pet_detail', id=pet.id)
     context = {
         "title": "Actualizar Datos",
         "form": form,
@@ -72,7 +69,6 @@ def pet_update_view(request, id):
 def pet_delete(request, id):
     """Eliminar Mascota"""
     pet = get_object_or_404(Pet, id=id)
-    pet.file.delete(save=False)
     pet.delete()
     return redirect('pets:index')
 
