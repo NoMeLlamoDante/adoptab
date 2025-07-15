@@ -51,7 +51,7 @@ def pet_detail_view(request, id):
 def pet_update_view(request, id):
     """Actualizar datos de mascota """
     pet = get_object_or_404(Pet, pk=id)
-    form = PetForm(request.POST or None instance=pet)
+    form = PetForm(request.POST or None, instance=pet)
 
     if request.method == 'POST' and form.is_valid():
         form.save()
