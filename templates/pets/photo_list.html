@@ -1,0 +1,68 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col col-12 col-lg-6">
+        <div class="row text-center">
+          <div class="col">
+            <h2 class="display-2">{{ pet.name.title }}</h2>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <table class="table caption-top align-middle">
+              <thead>
+                <tr>
+                  <th scope="col">Imagen</th>
+                  <th scope="col">Editar</th>
+                  <th scope="col">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for photo in photos %}
+                  <tr>
+                    <th>
+                      <img src="{{ photo.file.url }}" class="img-fluid" style=" width: 100%; max-height: 30vh; object-fit: cover;" />
+                    </th>
+                    <td>
+                      <a href="{% url 'pets:photo_update' photo.id %}" class="btn btn-secondary">
+                        <i class="bi bi-pencil"></i>
+                        Cambiar foto
+                      </a>
+                    </td>
+                    <td>
+                      <a href="{% url 'pets:photo_delete' photo.id %}" class="btn btn-danger">
+                        <i class="bi bi-eraser"></i>
+                        Borrar foto
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          {% if user.is_authenticated and user.id == pet.owner.id %}
+            <div class="col col-auto mb-3">
+              <a href="{% url 'pets:photo_add' pet.id %}" class="btn btn-primary">
+                <i class="bi bi-image"></i>
+                Agregar imagenes
+              </a>
+              <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-secondary me-3">Regresar</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

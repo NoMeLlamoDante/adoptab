@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # apps
     'pets.apps.PetsConfig',
-    # 'pictures',
     'users.apps.UsersConfig',
     # tools
     'bootstrap5',

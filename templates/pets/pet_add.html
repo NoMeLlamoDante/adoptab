@@ -14,7 +14,7 @@
         <h1 class="display-2">{{ title }}</h1>
       </div>
     </div>
-    <form action="{% url 'pets:add_pet' %}" method="post" class="form" enctype="multipart/form-data">
+    <form action="{% url 'pets:pet_add' %}" method="post" class="form" enctype="multipart/form-data">
       {% csrf_token %}
       {% bootstrap_form_errors form type='non_fields' %}
 
@@ -51,7 +51,7 @@
       <div class="row row-cols-2 justify-content-center">
         <div class="col col-6 col-sm-5 col-md-4 col-lg-3">
           {% bootstrap_field form.breed %}
-          {% bootstrap_field form.file %}
+          {% bootstrap_field form.size %}
         </div>
 
         <div class="col col-6 col-sm-5 col-md-4 col-lg-3">
