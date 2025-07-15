@@ -44,13 +44,12 @@ def register_view(request):
             'activation_url': activation_link
         })
 
-        # Temporally dissably by openocean
-        # send_mail(
-        #     subject="Activa tu cuenta",
-        #     message=text_message,
-        #     from_email=settings.EMAIL_HOST_USER,
-        #     recipient_list=[user.email],
-        # )
+        send_mail(
+            subject="Activa tu cuenta",
+            message=text_message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+        )
 
         login(request, user)
         messages.add_message(
@@ -158,6 +157,9 @@ def password_reset_view(request):
             messages.add_message(
                 request, messages.WARNING,
                 "El correo fue enviado con éxito, revise su carpeta de SPAM")
+            messages.add_message(
+                request, messages.INFO,
+                "El envío de correos está desactivado por el servidor")
             return redirect("users:login")
         else:
             messages.add_message(
