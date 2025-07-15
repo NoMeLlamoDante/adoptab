@@ -36,12 +36,9 @@
                 <span class="visually-hidden">Siguiente</span>
               </button>
             </div>
-
-            {% comment %} {% if pet.file %}
-              <img src="{{ pet.file.url }}" class="img-fluid" alt="" sizes="" srcset="" />
-            {% endif %} {% endcomment %}
           </div>
         </div>
+
         <div class="row">
           <div class="col">
             <table class="table caption-top">
@@ -98,9 +95,9 @@
                 <tr>
                   <th scope="row">Tamaño</th>
                   <td>
-                    {% if pet.hair == 'S' %}
+                    {% if pet.size == 'S' %}
                       Chico
-                    {% elif pet.hair == 'M' %}
+                    {% elif pet.size == 'M' %}
                       Mediano
                     {% else %}
                       Grande

@@ -51,7 +51,6 @@ class Pet(models.Model):
         default=SIZE_CHOICES[1], blank=True, null=True)
     in_adopt = models.BooleanField(default=True)
     bio = models.TextField(max_length=250, help_text="Datos de la mascota")
-    file = models.ImageField(upload_to="media/", blank=True, null=True)
     status = models.CharField(
         max_length=2, choices=STATUS_CHOICES, default=STATUS_CHOICES[1],
         blank=False, null=True)

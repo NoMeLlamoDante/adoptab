@@ -25,7 +25,6 @@ def pet_add_view(request):
     if request.method == 'POST' and form.is_valid():
         pet = form.save(commit=False)
         pet.status = 'OK'
-        pet.size = 'M'
         pet.owner = request.user
         pet.save()
         return redirect('pets:index')
@@ -59,7 +58,7 @@ def pet_update_view(request, id):
             if "file-clear" in request.POST:
                 pet.file.delete(save=True)
             form.save()
-            return redirect('pets:index')
+            return redirect('pets:pet_detail', id=pet.id)
     context = {
         "title": "Actualizar Datos",
         "form": form,

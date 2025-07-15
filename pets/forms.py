@@ -53,8 +53,6 @@ class PetForm(forms.ModelForm):
         initial="M",
     )
 
-    file = forms.ImageField(required=False)
-
     size = forms.ChoiceField(
         label="Tamaño",
         choices=SIZE_CHOICES,
@@ -79,8 +77,8 @@ class PetForm(forms.ModelForm):
     class Meta:
         model = Pet
         fields = ["name", "species", "sex", "birth_date",
-                  "bio", "breed", "color", "hair", "file", ]
-        exclude = ["status", "owner", "size"]
+                  "bio", "breed", "color", "hair", "size", ]
+        exclude = ["status", "owner"]
 
 
 class PhotoForm(forms.ModelForm):
