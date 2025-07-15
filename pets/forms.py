@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, Textarea
 
-from .models import Pet
+from .models import Pet, Photo
 # choices
 from .models import SPECIES_CHOICES, SEX_CHOICES
 from .models import SIZE_CHOICES, HAIR_CHOICES, STATUS_CHOICES
@@ -81,3 +81,13 @@ class PetForm(forms.ModelForm):
         fields = ["name", "species", "sex", "birth_date",
                   "bio", "breed", "color", "hair", "file", ]
         exclude = ["status", "owner", "size"]
+
+
+class PhotoForm(forms.ModelForm):
+    """Formulario de Imagenes"""
+    file = forms.ImageField(required=True)
+
+    class Meta:
+        model = Photo
+        fields = ["file"]
+        exclude = ["pet", "uploaded_at"]

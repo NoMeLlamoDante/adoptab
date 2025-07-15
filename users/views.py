@@ -44,16 +44,21 @@ def register_view(request):
             'activation_url': activation_link
         })
 
-        send_mail(
-            subject="Activa tu cuenta",
-            message=text_message,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[user.email],
-        )
+        # Temporally dissably by openocean
+        # send_mail(
+        #     subject="Activa tu cuenta",
+        #     message=text_message,
+        #     from_email=settings.EMAIL_HOST_USER,
+        #     recipient_list=[user.email],
+        # )
 
         login(request, user)
-        messages.add_message(request, messages.WARNING,
-                             "Cuenta creada con éxito, Para activarla, revise el correo en su bandeja de SPAM")
+        messages.add_message(
+            request, messages.WARNING,
+            "Cuenta creada con éxito, Para activarla, revise el correo en su bandeja de SPAM")
+        messages.add_message(
+            request, messages.INFO,
+            "El envío de correos está desactivado por el servidor")
         return redirect('pets:index')
 
     context = {

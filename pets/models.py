@@ -73,3 +73,24 @@ class Pet(models.Model):
         else:
             age_in_months = delta.years * 12 + delta.months
             return f"{age_in_months} meses"
+
+
+class Photo(models.Model):
+    """Different photo for a pet"""
+    pet = models.ForeignKey(
+        Pet, on_delete=models.CASCADE, related_name="photos")
+    file = models.ImageField(upload_to="pets/photo")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Foto de {self.pet.name}"
+
+
+class Service(models.Model):
+    """An agend to save pets info"""
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    role = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.name} - {self.role}"

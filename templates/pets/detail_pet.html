@@ -19,9 +19,27 @@
 
         <div class="row text-center">
           <div class="col">
-            {% if pet.file %}
+            <div id="carouselPet" class="carousel slide">
+              <div class="carousel-inner">
+                {% for photo in photos %}
+                  <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                    <img src="{{ photo.file.url }}" class="d-block text-center" alt="..." width="800" height="400" style="object-fit: cover; max-width: 100%; max-height: 40vh" />
+                  </div>
+                {% endfor %}
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselPet" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselPet" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+              </button>
+            </div>
+
+            {% comment %} {% if pet.file %}
               <img src="{{ pet.file.url }}" class="img-fluid" alt="" sizes="" srcset="" />
-            {% endif %}
+            {% endif %} {% endcomment %}
           </div>
         </div>
         <div class="row">
@@ -94,25 +112,14 @@
           </div>
         </div>
         <div class="row justify-content-center">
+          <div class="col col-auto mb-5">
+            <a href="{% url 'pets:list_photo' pet.id %}" class="btn btn-primary">
+              <i class="bi bi-image"></i>
+              ver fotos
+            </a>
+          </div>
+
           {% if user.is_authenticated %}
-            {% if pet.owner.profile.phone %}
-              <div class="col col-auto">
-                <a href="https://wa.me/{{ pet.owner.profile.phone }}" target="_blank" class="btn btn-success">
-                  <i class="bi bi-whatsapp"></i>
-                  Enviar Whataapp
-                </a>
-              </div>
-            {% endif %}
-
-            {% if pet.owner.email %}
-              <div class="col col-auto mb-5">
-                <a href="mailto:{{ pet.owner.email }}" target="_blank" class="btn btn-primary">
-                  <i class="bi bi-envelope-at-fill"></i>
-                  Enviar correo
-                </a>
-              </div>
-            {% endif %}
-
             {% if user.id == pet.owner.id %}
               <div class="col col-auto">
                 <a href="{% url 'pets:update_pet' pet.id %}" class="btn btn-secondary">
@@ -127,6 +134,24 @@
                   Borrar mascota
                 </a>
               </div>
+            {% else %}
+              {% if pet.owner.profile.phone %}
+                <div class="col col-auto">
+                  <a href="https://wa.me/{{ pet.owner.profile.phone }}" target="_blank" class="btn btn-success">
+                    <i class="bi bi-whatsapp"></i>
+                    Enviar Whataapp
+                  </a>
+                </div>
+              {% endif %}
+
+              {% if pet.owner.email %}
+                <div class="col col-auto mb-5">
+                  <a href="mailto:{{ pet.owner.email }}" target="_blank" class="btn btn-primary">
+                    <i class="bi bi-envelope-at-fill"></i>
+                    Enviar correo
+                  </a>
+                </div>
+              {% endif %}
             {% endif %}
           {% else %}
             <div class="col col-auto mb-5">
