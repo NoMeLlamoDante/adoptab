@@ -25,7 +25,6 @@ def pet_add_view(request):
     if request.method == 'POST' and form.is_valid():
         pet = form.save(commit=False)
         pet.status = 'OK'
-        pet.owner = request.user
         pet.save()
         return redirect('pets:index')
 

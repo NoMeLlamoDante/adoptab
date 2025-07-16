@@ -68,12 +68,6 @@ class PetForm(forms.ModelForm):
         required=False
     )
 
-    owner = forms.CharField(
-        label="Dueño",
-        max_length=150,
-        required=False
-    )
-
     class Meta:
         model = Pet
         fields = ["name", "species", "sex", "birth_date",
