@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Pet, Photo
+from .models import Pet, Photo, Ownership
 from .forms import PetForm, PhotoForm
 
 from django.contrib.auth.decorators import login_required
@@ -26,6 +26,8 @@ def pet_add_view(request):
         pet = form.save(commit=False)
         pet.status = 'OK'
         pet.save()
+        Ownership.objects.create(pet=pet, owner=request.user)
+
         return redirect('pets:index')
 
     context = {"title": "Nueva mascota", "form": form}

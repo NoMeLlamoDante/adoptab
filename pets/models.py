@@ -1,4 +1,3 @@
-
 from django.db import models
 from datetime import date
 from dateutil.relativedelta import relativedelta
@@ -55,7 +54,7 @@ class Pet(models.Model):
         max_length=2, choices=STATUS_CHOICES, default=STATUS_CHOICES[1],
         blank=False, null=True)
     owners = models.ManyToManyField(
-        User, related_name='owned_pets', blank=True, null=True)
+        User, through='Ownership', related_name='owned_pets')
 
     def __str__(self):
         return f"{self.species} - {self.name}"
@@ -94,6 +93,7 @@ class Photo(models.Model):
 #     def __str__(self):
 #         return f"{self.name} - {self.role}"
 
+
 class Ownership(models.Model):
     """A model saving ownership info"""
     pet = models.ForeignKey(Pet, on_delete=models.DO_NOTHING)
@@ -105,3 +105,5 @@ class Ownership(models.Model):
     class Meta:
         unique_together = ('pet', 'owner', 'start_date')
 
+    def __str__(self):
+        return f"{self.pet.name} - {self.owner} ({self.start_date} - {self.end_date or ""})"
