@@ -96,8 +96,8 @@ class Photo(models.Model):
 
 class Ownership(models.Model):
     """A model saving ownership info"""
-    pet = models.ForeignKey(Pet, on_delete=models.DO_NOTHING)
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     validated = models.BooleanField(default=False)
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(blank=True, null=True)

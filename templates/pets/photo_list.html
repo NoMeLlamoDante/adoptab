@@ -52,7 +52,7 @@
           </div>
         </div>
         <div class="row justify-content-center">
-          {% if user.is_authenticated and user.id == pet.owner.id %}
+          {% if user.is_authenticated and user in pet.owners.all %}
             <div class="col col-auto mb-3">
               <a href="{% url 'pets:photo_add' pet.id %}" class="btn btn-primary">
                 <i class="bi bi-image"></i>
