@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, Textarea
 
-from .models import Pet, Photo
+from .models import Pet, Photo, Ownership
 # choices
 from .models import SPECIES_CHOICES, SEX_CHOICES
 from .models import SIZE_CHOICES, HAIR_CHOICES, STATUS_CHOICES
@@ -83,3 +83,9 @@ class PhotoForm(forms.ModelForm):
         model = Photo
         fields = ["file"]
         exclude = ["pet", "uploaded_at"]
+
+
+class OwnerForm(forms.Form):
+    """Formulario de Dueños de mascota"""
+    owner = forms.CharField(label="Correo electrónico",
+                            required=True, max_length=50)

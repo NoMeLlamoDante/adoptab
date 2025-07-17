@@ -1,0 +1,79 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col col-12 col-lg-6">
+        <div class="row text-center">
+          <div class="col">
+            <h2 class="display-2">{{ pet.name.title }}</h2>
+            {% include 'common/messages.html' %}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <h3>Agregar Dueño</h3>
+            <form action="{% url 'pets:owner_list' pet.id %}" method="post" class="form">
+              {% csrf_token %}
+              {% bootstrap_form_errors form %}
+              {% bootstrap_form form %}
+              {% bootstrap_button button_type='submit' content='Aceptar' %}
+            </form>
+            <br /><br />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <!-- Pet info -->
+
+            <h3>Dueños</h3>
+            <!-- Owners info -->
+            <table class="table caption-top align-middle">
+              <thead>
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Periodo</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for owner in owners %}
+                  <tr class="align-items-center">
+                    <td>{{ owner.owner.first_name }}</td>
+                    <td>
+                      {{ owner.start_date|date:'j/b/y' }} -{% if owner.end_date %}
+                        {{ owner.end_date|date:'j/b/y' }}
+                      {% else %}
+                        presente
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if not owner.end_date and owner.owner == user %}
+                        <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-secondary me-2 ms-2">Terminar</a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Options -->
+        <div class="row justify-content-center">
+          <div class="col col-auto mt-2 mb-5">
+            <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-secondary me-2 ms-2">Regresar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

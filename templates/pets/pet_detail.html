@@ -147,6 +147,11 @@
                   Editar info
                 </a>
 
+                <a href="{% url 'pets:owner_list' pet.id %}" class="btn btn-secondary me-2 ms-2">
+                  <i class="bi bi-pencil"></i>
+                  Editar Dueños
+                </a>
+
                 {% url 'pets:pet_delete' pet.id as delete_url %}
                 {% with btn_subject='mascota' btn_modal_text='¿Quieres eliminar esta mascota?' btn_link=delete_url %}
                   {% include 'common/delete_btn.html' %}

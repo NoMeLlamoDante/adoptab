@@ -251,7 +251,6 @@ def profile_update(request):
 def delete_view(request):
     """Eliminar usuario"""
     user = get_object_or_404(User, id=request.user.id)
-    print(user)
     user.delete()
     logout(request)
     messages.add_message(request, messages.SUCCESS,

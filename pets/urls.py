@@ -9,6 +9,8 @@ from .views import (photo_add_view,
                     photo_list_view,
                     photo_update_view,
                     photo_delete)
+from .owners_views import (owner_list_view,
+                           end_ownership)
 
 app_name = "pets"
 
@@ -24,4 +26,6 @@ urlpatterns = [
     path('photo/<int:id>', photo_list_view, name="photo_list"),
     path('photo/update/<int:id>', photo_update_view, name="photo_update"),
     path('photo/delete/<int:id>', photo_delete, name="photo_delete"),
+
+    path('owner/list/<int:id>', owner_list_view, name="owner_list"),
 ]
