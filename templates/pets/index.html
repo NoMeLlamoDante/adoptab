@@ -19,9 +19,9 @@
       {% for pet in pets %}
         <div class="col col-lg-3 col-md-4 col-sm-6">
           <div class="card">
-            {% if pet.file %}
-              <img src="{{ pet.file.url }}" class="card-img-top" alt="..." style="max-height: 350px; object-fit:cover;" />
-            {% endif %}
+            {% with photos=pet.photos.all max_height=350 max_width=350 %}
+              {% include 'common/carousel.html' %}
+            {% endwith %}
             <div class="card-body">
               <h5 class="card-title">
                 {{ pet.name.title }}
@@ -36,14 +36,14 @@
                   <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-primary">Ver Detalle</a>
                 </div>
 
-                {% if user.is_authenticated and user.id == pet.owner.id %}
+                {% comment %} {% if user.is_authenticated and user in pet.owners.all %}
                   <div class="col col-auto">
                     <a href="{% url 'pets:pet_update' pet.id %}" class="btn btn-secondary">
                       <i class="bi bi-pencil"></i>
                       Editar
                     </a>
                   </div>
-                {% endif %}
+                {% endif %} {% endcomment %}
               </div>
             </div>
           </div>

@@ -1,4 +1,3 @@
-
 from django.db import models
 from datetime import date
 from dateutil.relativedelta import relativedelta
@@ -54,11 +53,12 @@ class Pet(models.Model):
     status = models.CharField(
         max_length=2, choices=STATUS_CHOICES, default=STATUS_CHOICES[1],
         blank=False, null=True)
-    owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='pets')
+    owners = models.ManyToManyField(
+        User, through='Ownership', related_name='owned_pets')
 
     def __str__(self):
-        return f"{self.species} - {self.name} - {self.owner}"
+        adoption_status = "- adopted" if not self.in_adopt else ""
+        return f"{self.species} - {self.name} {adoption_status}"
 
     @property
     def pet_age(self):
@@ -85,11 +85,36 @@ class Photo(models.Model):
         return f"Foto de {self.pet.name}"
 
 
-class Service(models.Model):
-    """An agend to save pets info"""
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=20)
-    role = models.CharField(max_length=100)
+# class Service(models.Model):
+#     """An agend to save pets info"""
+#     name = models.CharField(max_length=100)
+#     phone = models.CharField(max_length=20)
+#     role = models.CharField(max_length=100)
+
+#     def __str__(self):
+#         return f"{self.name} - {self.role}"
+
+
+class Ownership(models.Model):
+    """A model saving ownership info"""
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    validated = models.BooleanField(default=False)
+    start_date = models.DateField(auto_now_add=True)
+    end_date = models.DateField(blank=True, null=True)
+
+    @property
+    def period(self):
+        start_str = self.start_date.strftime("%d/%b/%y")
+        if self.end_date:
+            end_str = self.end_date.strftime("%d/%b/%y")
+        end = end_str if self.end_date else "present"
+        period = f"({start_str} - {end})" if self.validated else ""
+        return period
+
+    class Meta:
+        unique_together = ('pet', 'owner', 'start_date')
 
     def __str__(self):
-        return f"{self.name} - {self.role}"
+
+        return f"{self.pet.name} - {self.owner} {self.period} "
