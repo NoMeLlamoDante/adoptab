@@ -58,7 +58,7 @@
                     </td>
                     <td>
                       {% if not owner.end_date and owner.owner == user %}
-                        <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-secondary me-2 ms-2">Terminar</a>
+                        <a href="{% url 'pets:owner_end' owner.id %}" class="btn btn-secondary me-2 ms-2">Terminar</a>
                       {% endif %}
                     </td>
                   </tr>

@@ -28,4 +28,5 @@ urlpatterns = [
     path('photo/delete/<int:id>', photo_delete, name="photo_delete"),
 
     path('owner/list/<int:id>', owner_list_view, name="owner_list"),
+    path('owner/end/<int:id>', end_ownership, name="owner_end"),
 ]

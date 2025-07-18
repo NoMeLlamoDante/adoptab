@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Pet, Photo, Ownership
-from .forms import PetForm, PhotoForm
-
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 
 from django.contrib import messages
+
+from .models import Pet, Photo, Ownership
+from .forms import PetForm, PhotoForm
 
 
 # Create your views here
@@ -40,9 +40,11 @@ def pet_add_view(request):
 def pet_detail_view(request, id):
     """Vista de datos de mascota"""
     pet = get_object_or_404(Pet.objects.prefetch_related('photos'), id=id)
+    owners = Ownership.objects.filter(validated=True, pet=pet)
     context = {
         "title": pet.name,
         "pet": pet,
+        "owners": owners,
     }
     return render(request, "pets/pet_detail.html", context)
 

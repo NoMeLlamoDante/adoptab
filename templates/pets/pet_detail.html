@@ -108,20 +108,20 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for owner in pet.owners.all %}
+                  {% for owner in owners %}
                     {% if not owner.end_date %}
                       <tr class="align-items-center">
-                        <td>{{ owner.first_name }}</td>
+                        <td>{{ owner.owner.first_name }}</td>
                         <td>
-                          {{ owner.email }}
-                          {% if owner.email %}
-                            <a href="mailto:{{ owner.email }}" target="_blank" class="btn btn-primary"><i class="bi bi-envelope-at-fill"></i></a>
+                          {{ owner.owner.email }}
+                          {% if owner.owner.email %}
+                            <a href="mailto:{{ owner.owner.email }}" target="_blank" class="btn btn-primary"><i class="bi bi-envelope-at-fill"></i></a>
                           {% endif %}
                         </td>
                         <td>
-                          {{ owner.profile.phone }}
-                          {% if owner.profile.phone %}
-                            <a href="https://wa.me/{{ owner.profile.phone }}" target="_blank" class="btn btn-success me-2 ms-2"><i class="bi bi-whatsapp"></i></a>
+                          {{ owner.owner.profile.phone }}
+                          {% if owner.owner.profile.phone %}
+                            <a href="https://wa.me/{{ owner.owner.profile.phone }}" target="_blank" class="btn btn-success me-2 ms-2"><i class="bi bi-whatsapp"></i></a>
                           {% endif %}
                         </td>
                       </tr>

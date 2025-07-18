@@ -36,14 +36,14 @@
                   <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-primary">Ver Detalle</a>
                 </div>
 
-                {% if user.is_authenticated and user in pet.owners.all %}
+                {% comment %} {% if user.is_authenticated and user in pet.owners.all %}
                   <div class="col col-auto">
                     <a href="{% url 'pets:pet_update' pet.id %}" class="btn btn-secondary">
                       <i class="bi bi-pencil"></i>
                       Editar
                     </a>
                   </div>
-                {% endif %}
+                {% endif %} {% endcomment %}
               </div>
             </div>
           </div>

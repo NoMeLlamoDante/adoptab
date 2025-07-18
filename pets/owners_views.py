@@ -1,12 +1,13 @@
+from datetime import date
 from django.shortcuts import render, redirect, get_object_or_404
-
-from .models import Pet, Photo, User, Ownership
-from .forms import OwnerForm
 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 
 from django.contrib import messages
+
+from .models import Pet, User, Ownership
+from .forms import OwnerForm
 
 
 @login_required
@@ -43,8 +44,13 @@ def owner_list_view(request, id):
 @require_http_methods(["GET"])
 def end_ownership(request, id):
     """Dejar de ser dueño de una mascota"""
-    user = get_object_or_404(User, id=request.user.id)
-
-    messages.add_message(request, messages.SUCCESS,
-                         "Usuario eliminado correctamente")
-    return redirect('users:login')
+    try:
+        ownership = get_object_or_404(Ownership, id=id)
+        ownership.end_date = date.today()
+        ownership.save()
+        messages.add_message(request, messages.SUCCESS,
+                             "datos actualizados")
+    except Exception:
+        messages.add_message(request, messages.ERROR,
+                             "error en la transacción")
+    return redirect('pets:owner_list', id=ownership.pet.id)
