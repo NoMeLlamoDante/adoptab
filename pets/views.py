@@ -1,17 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Pet, Photo
-from .forms import PetForm, PhotoForm
-
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
+
+from django.contrib import messages
+
+from .models import Pet, Photo, Ownership
+from .forms import PetForm, PhotoForm
 
 
 # Create your views here
 @require_http_methods(["GET"])
 def index_view(request):
     """Lista de mascotas """
-    pets = Pet.objects.all()
+    pets = Pet.objects.all().prefetch_related('photos')
     context = {"title": "Lista Mascotas", "pets": pets}
     return render(request, "pets/index.html", context)
 
@@ -25,8 +27,9 @@ def pet_add_view(request):
     if request.method == 'POST' and form.is_valid():
         pet = form.save(commit=False)
         pet.status = 'OK'
-        pet.owner = request.user
         pet.save()
+        Ownership.objects.create(pet=pet, owner=request.user)
+
         return redirect('pets:index')
 
     context = {"title": "Nueva mascota", "form": form}
@@ -36,12 +39,12 @@ def pet_add_view(request):
 @require_http_methods(["GET"])
 def pet_detail_view(request, id):
     """Vista de datos de mascota"""
-    pet = get_object_or_404(Pet, pk=id)
-    photos = Photo.objects.filter(pet=pet) or None
+    pet = get_object_or_404(Pet.objects.prefetch_related('photos'), id=id)
+    owners = Ownership.objects.filter(validated=True, pet=pet)
     context = {
         "title": pet.name,
         "pet": pet,
-        "photos": photos,
+        "owners": owners,
     }
     return render(request, "pets/pet_detail.html", context)
 
@@ -55,6 +58,8 @@ def pet_update_view(request, id):
 
     if request.method == 'POST' and form.is_valid():
         form.save()
+        messages.add_message(request, messages.SUCCESS,
+                             "Información actualizada")
         return redirect('pets:pet_detail', id=pet.id)
     context = {
         "title": "Actualizar Datos",
@@ -69,6 +74,7 @@ def pet_update_view(request, id):
 def pet_delete(request, id):
     """Eliminar Mascota"""
     pet = get_object_or_404(Pet, id=id)
+
     pet.delete()
     return redirect('pets:index')
 

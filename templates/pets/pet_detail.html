@@ -14,33 +14,21 @@
         <div class="row text-center">
           <div class="col">
             <h2 class="display-2">{{ pet.name.title }}</h2>
+            {% include 'common/messages.html' %}
           </div>
         </div>
-
+        <!-- carousel -->
         <div class="row text-center">
           <div class="col">
-            <div id="carouselPet" class="carousel slide">
-              <div class="carousel-inner">
-                {% for photo in photos %}
-                  <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
-                    <img src="{{ photo.file.url }}" class="d-block text-center" alt="..." width="800" height="400" style="object-fit: cover; max-width: 100%; max-height: 40vh" />
-                  </div>
-                {% endfor %}
-              </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselPet" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselPet" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Siguiente</span>
-              </button>
-            </div>
+            {% with photos=pet.photos.all max_height=400 max_width=500 %}
+              {% include 'common/carousel.html' %}
+            {% endwith %}
           </div>
         </div>
 
         <div class="row">
           <div class="col">
+            <!-- Pet info -->
             <table class="table caption-top">
               <thead>
                 <tr>
@@ -106,57 +94,79 @@
                 </tr>
               </tbody>
             </table>
+
+            <br /> <br />
+            {% if user.is_authenticated %}
+              <h3>Dueños</h3>
+              <!-- Owners info -->
+              <table class="table caption-top align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Teléfono</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for owner in owners %}
+                    {% if not owner.end_date %}
+                      <tr class="align-items-center">
+                        <td>{{ owner.owner.first_name }}</td>
+                        <td>
+                          {{ owner.owner.email }}
+                          {% if owner.owner.email %}
+                            <a href="mailto:{{ owner.owner.email }}" target="_blank" class="btn btn-primary"><i class="bi bi-envelope-at-fill"></i></a>
+                          {% endif %}
+                        </td>
+                        <td>
+                          {{ owner.owner.profile.phone }}
+                          {% if owner.owner.profile.phone %}
+                            <a href="https://wa.me/{{ owner.owner.profile.phone }}" target="_blank" class="btn btn-success me-2 ms-2"><i class="bi bi-whatsapp"></i></a>
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% endif %}
+          </div>
+        </div>
+        <!-- Options -->
+        <div class="row justify-content-center">
+          <div class="col col-auto">
+            {% if user.is_authenticated %}
+              {% if user in pet.owners.all %}
+                <a href="{% url 'pets:photo_list' pet.id %}" class="btn btn-primary me-2">
+                  <i class="bi bi-image"></i>
+                  ver fotos
+                </a>
+
+                <a href="{% url 'pets:pet_update' pet.id %}" class="btn btn-secondary me-2 ms-2">
+                  <i class="bi bi-pencil"></i>
+                  Editar info
+                </a>
+
+                <a href="{% url 'pets:owner_list' pet.id %}" class="btn btn-secondary me-2 ms-2">
+                  <i class="bi bi-pencil"></i>
+                  Editar Dueños
+                </a>
+
+                {% url 'pets:pet_delete' pet.id as delete_url %}
+                {% with btn_subject='mascota' btn_modal_text='¿Quieres eliminar esta mascota?' btn_link=delete_url %}
+                  {% include 'common/delete_btn.html' %}
+                {% endwith %}
+              {% endif %}
+            {% else %}
+              <a href="{% url 'users:login' %}" class="link-opacity-50-hover">¿Quieres ver los datos? Entonces inicia sesión</a>
+            {% endif %}
+            <br />
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col col-auto mb-5">
-            <a href="{% url 'pets:photo_list' pet.id %}" class="btn btn-primary">
-              <i class="bi bi-image"></i>
-              ver fotos
-            </a>
+          <div class="col col-auto mt-2 mb-5">
+            <a href="{% url 'pets:index' %}" class="btn btn-secondary me-2 ms-2">Regresar</a>
           </div>
-
-          {% if user.is_authenticated %}
-            {% if user.id == pet.owner.id %}
-              <div class="col col-auto">
-                <a href="{% url 'pets:pet_update' pet.id %}" class="btn btn-secondary">
-                  <i class="bi bi-pencil"></i>
-                  Editar
-                </a>
-              </div>
-
-              <div class="col col-auto">
-                <a href="{% url 'pets:pet_delete' pet.id %}" class="btn btn-danger">
-                  <i class="bi bi-eraser"></i>
-                  Borrar mascota
-                </a>
-              </div>
-            {% else %}
-              {% if pet.owner.profile.phone %}
-                <div class="col col-auto">
-                  <a href="https://wa.me/{{ pet.owner.profile.phone }}" target="_blank" class="btn btn-success">
-                    <i class="bi bi-whatsapp"></i>
-                    Enviar Whataapp
-                  </a>
-                </div>
-              {% endif %}
-
-              {% if pet.owner.email %}
-                <div class="col col-auto mb-5">
-                  <a href="mailto:{{ pet.owner.email }}" target="_blank" class="btn btn-primary">
-                    <i class="bi bi-envelope-at-fill"></i>
-                    Enviar correo
-                  </a>
-                </div>
-              {% endif %}
-            {% endif %}
-          {% else %}
-            <div class="col col-auto mb-5">
-              <div class="col mt-3 mb-5">
-                <a href="{% url 'users:login' %}" class="link-opacity-50-hover">¿Quieres ver los datos? Entonces inicia sesión</a>
-              </div>
-            </div>
-          {% endif %}
         </div>
       </div>
     </div>
