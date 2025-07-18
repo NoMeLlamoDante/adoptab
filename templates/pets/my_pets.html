@@ -1,0 +1,55 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col col-12 col-md-8">
+        <div class="row">
+          <div class="col">
+            <h1 class="display-5">{{ title }}</h1>
+          </div>
+        </div>
+
+        {% include 'common/messages.html' %}
+        <!-- Mascotas actuales -->
+        <table class="table caption-top align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Edad</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pet in pets %}
+              <tr class="align-items-center">
+                <td>
+                  {{ pet.name.title }}
+                  <img src="{% static 'img/'|add:pet.species|add:'_'|add:pet.sex|add:'.svg' %}" alt="" style="width: 2rem; height: 2rem;" />
+                </td>
+                <td>{{ pet.pet_age }}</td>
+                <td>
+                  <a href="{% url 'pets:pet_detail' pet.id %}" class="btn btn-primary">Detalle</a>
+                  <a href="{% url 'pets:pet_update' pet.id %}" class="btn btn-secondary">Editar Info</a>
+                  <a href="{% url 'pets:owner_list' pet.id %}" class="btn btn-secondary">Editar Dueños</a>
+                  {% if not pet.in_adopt %}
+                    <a href="{% url 'pets:pet_in_adoption' pet.id %}" class="btn btn-light">dar en adopcion</a>
+                  {% else %}
+                    <a href="{% url 'pets:pet_adopted' pet.id %}" class="btn btn-dark">completar adopcion</a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

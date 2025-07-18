@@ -54,3 +54,46 @@ def end_ownership(request, id):
         messages.add_message(request, messages.ERROR,
                              "error en la transacción")
     return redirect('pets:owner_list', id=ownership.pet.id)
+
+
+@login_required
+@require_http_methods(["GET"])
+def my_pets_view(request):
+    """Lista de mascotas asociadas a mi"""
+    pets = Pet.objects.filter(
+        ownership__owner=request.user,
+        ownership__validated=True,
+        ownership__end_date=None,
+    )
+    pet_requests = Pet.objects.filter(
+        ownership__owner=request.user,
+        ownership__validated=False,
+        ownership__end_date=None,
+    )
+    context = {
+        "title": "Mis Mascotas",
+        "pets": pets,
+        "request": pet_requests,
+        "url_prev": request.META.get('HTTP_REFERER'),
+    }
+    return render(request, "pets/my_pets.html", context)
+
+
+@login_required
+@require_http_methods(["GET"])
+def adoption(request, id):
+    """Poner mascota en adopción"""
+    pet = get_object_or_404(Pet, id=id)
+    pet.in_adopt = True
+    pet.save()
+    return redirect('pets:index')
+
+
+@login_required
+@require_http_methods(["GET"])
+def adopted(request, id):
+    """Completar adopción de mascota"""
+    pet = get_object_or_404(Pet, id=id)
+    pet.in_adopt = False
+    pet.save()
+    return redirect('pets:owner_list', id=pet.id)
