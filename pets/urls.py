@@ -13,7 +13,9 @@ from .owners_views import (owner_list_view,
                            end_ownership,
                            my_pets_view,
                            adoption,
-                           adopted)
+                           adopted,
+                           accept_request,
+                           reject_request)
 
 app_name = "pets"
 
@@ -37,4 +39,6 @@ urlpatterns = [
     path('in_adoption/<int:id>', adoption, name="pet_in_adoption"),
     path('adopted/<int:id>', adopted, name="pet_adopted"),
 
+    path('owner/accept/<int:id>', accept_request, name="ownership_accept"),
+    path('owner/reject/<int:id>', reject_request, name="ownership_reject"),
 ]

@@ -65,15 +65,13 @@ def my_pets_view(request):
         ownership__validated=True,
         ownership__end_date=None,
     )
-    pet_requests = Pet.objects.filter(
-        ownership__owner=request.user,
-        ownership__validated=False,
-        ownership__end_date=None,
-    )
+
+    owners_request = Ownership.objects.filter(
+        validated=False, owner=request.user)
     context = {
         "title": "Mis Mascotas",
         "pets": pets,
-        "request": pet_requests,
+        "owners_request": owners_request,
         "url_prev": request.META.get('HTTP_REFERER'),
     }
     return render(request, "pets/my_pets.html", context)
@@ -97,3 +95,22 @@ def adopted(request, id):
     pet.in_adopt = False
     pet.save()
     return redirect('pets:owner_list', id=pet.id)
+
+
+@login_required
+@require_http_methods(["GET"])
+def accept_request(request, id):
+    """aceptar solicitud de mascota"""
+    owner = get_object_or_404(Ownership, id=id)
+    owner.validated = True
+    owner.save()
+    return redirect('pets:my_pets')
+
+
+@login_required
+@require_http_methods(["GET"])
+def reject_request(request, id):
+    """Rechazar solicitud de mascota"""
+    owner = get_object_or_404(Ownership, id=id)
+    owner.delete()
+    return redirect('pets:my_pets')
