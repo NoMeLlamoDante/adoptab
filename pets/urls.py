@@ -10,7 +10,12 @@ from .views import (photo_add_view,
                     photo_update_view,
                     photo_delete)
 from .owners_views import (owner_list_view,
-                           end_ownership)
+                           end_ownership,
+                           my_pets_view,
+                           adoption,
+                           adopted,
+                           accept_request,
+                           reject_request)
 
 app_name = "pets"
 
@@ -29,4 +34,11 @@ urlpatterns = [
 
     path('owner/list/<int:id>', owner_list_view, name="owner_list"),
     path('owner/end/<int:id>', end_ownership, name="owner_end"),
+    path('my_pets/', my_pets_view, name="my_pets"),
+
+    path('in_adoption/<int:id>', adoption, name="pet_in_adoption"),
+    path('adopted/<int:id>', adopted, name="pet_adopted"),
+
+    path('owner/accept/<int:id>', accept_request, name="ownership_accept"),
+    path('owner/reject/<int:id>', reject_request, name="ownership_reject"),
 ]

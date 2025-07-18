@@ -54,3 +54,63 @@ def end_ownership(request, id):
         messages.add_message(request, messages.ERROR,
                              "error en la transacción")
     return redirect('pets:owner_list', id=ownership.pet.id)
+
+
+@login_required
+@require_http_methods(["GET"])
+def my_pets_view(request):
+    """Lista de mascotas asociadas a mi"""
+    pets = Pet.objects.filter(
+        ownership__owner=request.user,
+        ownership__validated=True,
+        ownership__end_date=None,
+    )
+
+    owners_request = Ownership.objects.filter(
+        validated=False, owner=request.user)
+    context = {
+        "title": "Mis Mascotas",
+        "pets": pets,
+        "owners_request": owners_request,
+        "url_prev": request.META.get('HTTP_REFERER'),
+    }
+    return render(request, "pets/my_pets.html", context)
+
+
+@login_required
+@require_http_methods(["GET"])
+def adoption(request, id):
+    """Poner mascota en adopción"""
+    pet = get_object_or_404(Pet, id=id)
+    pet.in_adopt = True
+    pet.save()
+    return redirect('pets:index')
+
+
+@login_required
+@require_http_methods(["GET"])
+def adopted(request, id):
+    """Completar adopción de mascota"""
+    pet = get_object_or_404(Pet, id=id)
+    pet.in_adopt = False
+    pet.save()
+    return redirect('pets:owner_list', id=pet.id)
+
+
+@login_required
+@require_http_methods(["GET"])
+def accept_request(request, id):
+    """aceptar solicitud de mascota"""
+    owner = get_object_or_404(Ownership, id=id)
+    owner.validated = True
+    owner.save()
+    return redirect('pets:my_pets')
+
+
+@login_required
+@require_http_methods(["GET"])
+def reject_request(request, id):
+    """Rechazar solicitud de mascota"""
+    owner = get_object_or_404(Ownership, id=id)
+    owner.delete()
+    return redirect('pets:my_pets')

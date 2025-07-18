@@ -57,7 +57,8 @@ class Pet(models.Model):
         User, through='Ownership', related_name='owned_pets')
 
     def __str__(self):
-        return f"{self.species} - {self.name}"
+        adoption_status = "- adopted" if not self.in_adopt else ""
+        return f"{self.species} - {self.name} {adoption_status}"
 
     @property
     def pet_age(self):
@@ -102,8 +103,18 @@ class Ownership(models.Model):
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(blank=True, null=True)
 
+    @property
+    def period(self):
+        start_str = self.start_date.strftime("%d/%b/%y")
+        if self.end_date:
+            end_str = self.end_date.strftime("%d/%b/%y")
+        end = end_str if self.end_date else "present"
+        period = f"({start_str} - {end})" if self.validated else ""
+        return period
+
     class Meta:
         unique_together = ('pet', 'owner', 'start_date')
 
     def __str__(self):
-        return f"{self.pet.name} - {self.owner} ({self.start_date} - {self.end_date or ""})"
+
+        return f"{self.pet.name} - {self.owner} {self.period} "

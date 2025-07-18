@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
@@ -13,7 +14,7 @@ from .forms import PetForm, PhotoForm
 @require_http_methods(["GET"])
 def index_view(request):
     """Lista de mascotas """
-    pets = Pet.objects.all().prefetch_related('photos')
+    pets = Pet.objects.all().prefetch_related('photos').filter(in_adopt=True)
     context = {"title": "Lista Mascotas", "pets": pets}
     return render(request, "pets/index.html", context)
 
@@ -28,7 +29,9 @@ def pet_add_view(request):
         pet = form.save(commit=False)
         pet.status = 'OK'
         pet.save()
-        Ownership.objects.create(pet=pet, owner=request.user)
+        ownership = Ownership.objects.create(pet=pet, owner=request.user)
+        ownership.validated = True
+        ownership.save()
 
         return redirect('pets:index')
 
@@ -110,6 +113,7 @@ def photo_list_view(request, id):
         "title": f"Fotos de {pet.name}",
         "pet": pet,
         "photos": photos,
+        "url_prev": request.META.get('HTTP_REFERER'),
     }
     return render(request, "pets/photo_list.html", context)
 
