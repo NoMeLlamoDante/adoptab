@@ -1,10 +1,9 @@
 from datetime import date
 from typing import Optional
+from pets.utils.errors import PetError
 
 from pets.models import Pet, Ownership, PetLogs, OwnerLogs
 from django.contrib.auth.models import User
-
-from utils.errors import PetError
 
 
 class PetService:
@@ -28,7 +27,7 @@ class PetService:
         # Verificar variables
         if not name or len(name) > 100:
             raise PetError('El nombre debe estar entre 1 y 100 caracteres')
-        if birth_date:
+        if not birth_date:
             raise PetError('Fecha de nacimiento inválida')
         if species not in Pet.SPECIES_CHOICES:
             raise PetError('Valor de especie inválido')
