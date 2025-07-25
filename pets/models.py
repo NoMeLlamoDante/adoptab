@@ -32,6 +32,31 @@ STATUS_CHOICES = [
 # Create your models here.
 class Pet(models.Model):
     """Pet Basic info"""
+    SPECIES_CHOICES = [
+        ("cat", "Gato"),
+        ("dog", "Perro"),
+    ]
+
+    SEX_CHOICES = [
+        ("M", "Macho"),
+        ("F", "Hembra"),
+    ]
+    SIZE_CHOICES = [
+        ('S', 'Chico'),
+        ('M', 'Mediano'),
+        ('L', 'Grande'),
+    ]
+    HAIR_CHOICES = [
+        ('S', 'Corto'),
+        ('M', 'Mediano'),
+        ('L', 'Largo'),
+    ]
+    STATUS_CHOICES = [
+        ('OK', 'Normal'),
+        ('SK', 'Enfermo'),
+        ('DF', 'Fallecido'),
+    ]
+
     name = models.CharField(max_length=100)
     birth_date = models.DateField(
         help_text="DD/MM/AAAA", blank=True, null=True)
@@ -85,16 +110,6 @@ class Photo(models.Model):
         return f"Foto de {self.pet.name}"
 
 
-# class Service(models.Model):
-#     """An agend to save pets info"""
-#     name = models.CharField(max_length=100)
-#     phone = models.CharField(max_length=20)
-#     role = models.CharField(max_length=100)
-
-#     def __str__(self):
-#         return f"{self.name} - {self.role}"
-
-
 class Ownership(models.Model):
     """A model saving ownership info"""
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
@@ -118,3 +133,19 @@ class Ownership(models.Model):
     def __str__(self):
 
         return f"{self.pet.name} - {self.owner} {self.period} "
+
+
+class PetLogs(models.Model):
+    """Log from any movement on Pets"""
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
+    action = models.CharField(max_length=100)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class OwnerLogs(models.Model):
+    """Log from any movement on Pets"""
+    ownership = models.ForeignKey(Ownership, on_delete=models.CASCADE)
+    action = models.CharField(max_length=100)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

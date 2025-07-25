@@ -1,0 +1,2 @@
+class PetError(Exception):
+    pass
