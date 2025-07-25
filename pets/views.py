@@ -8,6 +8,7 @@ from django.contrib import messages
 
 from .models import Pet, Photo, Ownership
 from .forms import PetForm, PhotoForm
+from .services.service import PetService
 
 
 # Create your views here
@@ -24,15 +25,27 @@ def index_view(request):
 def pet_add_view(request):
     """ Vista para añadir nuevas mascotas"""
     form = PetForm(request.POST or None)
-
     if request.method == 'POST' and form.is_valid():
-        pet = form.save(commit=False)
-        pet.status = 'OK'
-        pet.save()
-        ownership = Ownership.objects.create(pet=pet, owner=request.user)
-        ownership.validated = True
-        ownership.save()
-
+        try:
+            service = PetService()
+            pet = service.createPet(
+                user=request.user,
+                name=form.cleaned_data["name"],
+                birth_date=form.cleaned_data["birth_date"],
+                species=form.cleaned_data["species"],
+                breed=form.cleaned_data["breed"],
+                sex=form.cleaned_data["sex"],
+                color=form.cleaned_data["color"],
+                hair=form.cleaned_data["hair"],
+                size=form.cleaned_data["size"],
+                bio=form.cleaned_data["bio"],
+            )
+            messages.add_message(request, messages.SUCCESS,
+                                 "Mascota creada")
+        except Exception as e:
+            print(e)
+            messages.add_message(request, messages.error,
+                                 "No es posible crear la mascota")
         return redirect('pets:index')
 
     context = {"title": "Nueva mascota", "form": form}
