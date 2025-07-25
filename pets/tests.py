@@ -22,14 +22,14 @@ class PetServiceTests(TestCase):
             user=self.user,
             name="Garfield",
             birth_date=datetime.datetime(2020, 5, 15),
-            species=Pet.SPECIES_CHOICES[0],
+            species="cat",
             breed="exótico",
-            sex=Pet.SEX_CHOICES[0],
+            sex="M",
             color="Naranja",
-            hair=Pet.HAIR_CHOICES[0],
-            size=Pet.SIZE_CHOICES[1],
+            hair="S",
+            size="M",
             bio="no le gustan los lunes",
         )
         self.assertIsNotNone(pet)
         self.assertEqual("Garfield", pet.name)
-        self.assertEqual(("M", "Macho"), pet.sex)
+        self.assertEqual("M", pet.sex)

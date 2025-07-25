@@ -29,7 +29,8 @@ class PetService:
             raise PetError('El nombre debe estar entre 1 y 100 caracteres')
         if not birth_date:
             raise PetError('Fecha de nacimiento inválida')
-        if species not in Pet.SPECIES_CHOICES:
+        spieces_options = dict(Pet.SPECIES_CHOICES).keys()
+        if species not in spieces_options:
             raise PetError('Valor de especie inválido')
         if not breed or len(breed) > 50:
             raise PetError(
@@ -37,14 +38,16 @@ class PetService:
         if not color or len(color) > 50:
             raise PetError(
                 'La color de pelo de la mascota debe estar entre 1 y 50 caracteres')
-        if not bio or len(bio) > 250:
+        if len(bio) > 250:
             raise PetError('el texto debe estar entre 1 y 250 caracteres')
-
-        if sex not in Pet.SEX_CHOICES:
+        sex_options = dict(Pet.SEX_CHOICES).keys()
+        if sex not in sex_options:
             raise PetError('Valor de sexo inválido')
-        if size not in Pet.SIZE_CHOICES:
+        size_options = dict(Pet.SIZE_CHOICES).keys()
+        if size not in size_options:
             raise PetError('Valor de tamaño inválido')
-        if hair not in Pet.HAIR_CHOICES:
+        hair_options = dict(Pet.HAIR_CHOICES).keys()
+        if hair not in hair_options:
             raise PetError('Valor de sexo inválido')
 
         pet = None
