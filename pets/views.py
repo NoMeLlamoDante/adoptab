@@ -9,6 +9,8 @@ from django.contrib import messages
 from .models import Pet, Photo, Ownership
 from .forms import PetForm, PhotoForm
 from .services.service import PetService
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 
 
 # Create your views here
@@ -53,6 +55,7 @@ def pet_add_view(request):
 
 
 @require_http_methods(["GET"])
+@cache_page(60*15)  # Seconds
 def pet_detail_view(request, id):
     """Vista de datos de mascota"""
     pet = get_object_or_404(Pet.objects.prefetch_related('photos'), id=id)
@@ -118,6 +121,8 @@ def photo_add_view(request, id):
 
 @login_required
 @require_http_methods(["GET"])
+@vary_on_cookie
+@cache_page(60*15)  # Seconds
 def photo_list_view(request, id):
     """Vista para agregar imágenes a las mascotas"""
     pet = get_object_or_404(Pet, pk=id)
