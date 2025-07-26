@@ -1,5 +1,5 @@
 {% extends 'common/base.html' %}
-
+{% load cache %}
 {% load static %}
 {% load bootstrap5 %}
 
@@ -15,6 +15,7 @@
       </div>
     </div>
     {% include 'common/messages.html' %}
+    {% cache 300 latest_pets %}
     <div class="row row-cols-auto">
       {% for pet in pets %}
         <div class="col col-lg-3 col-md-4 col-sm-6">
@@ -50,5 +51,6 @@
         </div>
       {% endfor %}
     </div>
+    {% endcache %}
   </div>
 {% endblock %}
