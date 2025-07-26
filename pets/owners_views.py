@@ -9,9 +9,12 @@ from django.contrib import messages
 from .models import Pet, User, Ownership
 from .forms import OwnerForm
 
+from django.views.decorators.cache import cache_page
+
 
 @login_required
 @require_http_methods(["GET", "POST"])
+@cache_page(60*15)  # seconds
 def owner_list_view(request, id):
     """Vista de dueños de mascota"""
     pet = get_object_or_404(Pet, pk=id)
